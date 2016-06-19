@@ -1,5 +1,7 @@
 package ftn.ra122013.webshop.services;
 
+import java.util.ArrayList;
+
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -8,10 +10,14 @@ import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+
 import ftn.ra122013.webshop.beans.*;
 import ftn.ra122013.webshop.dao.*;
+import ftn.ra122013.webshop.json.JSONParser;
 
 @Path(value="/user")
 public class UserService {
@@ -28,6 +34,32 @@ public class UserService {
         return "Hello Jersey";
     }
 
+    @GET
+    @Path("/getAll")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getAllUsers(){
+    	HttpSession session = this.request.getSession();
+        if (session.getAttribute("user") == null) {
+            return "ERROR. Not logged in";
+        }
+        
+        ArrayList<User> users = DAO.getAllUsers();
+        return JSONParser.toJSON(users);
+    }
+    
+    @GET
+    @Path("/get/{username}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getUser(@PathParam("username") String username){
+    	HttpSession session = this.request.getSession();
+        if (session.getAttribute("user") == null) {
+            return "ERROR. Not logged in";
+        }
+        
+        User user = DAO.getUser(username);
+        return JSONParser.toJSON(user);
+    }
+    
     @POST
     @Path(value="/register")
     @Consumes(value={"application/x-www-form-urlencoded"})
@@ -77,4 +109,5 @@ public class UserService {
         }
         return "Unreckognized user";
     }
+    
 }
