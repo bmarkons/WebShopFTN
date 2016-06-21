@@ -40,7 +40,9 @@ public class WebShopDAO {
 		try {
 			if (!usersFile.exists()) {
 				usersFile.createNewFile();
-				save(usersFile, new ArrayList<User>());
+				ArrayList<User> users = new ArrayList<User>();
+				users.add(new Administrator("admin", "admin", null, null, null, null, null, null));
+				save(usersFile, users);
 			}
 			if (!catFile.exists()) {
 				catFile.createNewFile();
@@ -240,8 +242,8 @@ public class WebShopDAO {
 		for (Deliverer del : deliverers) {
 			if (del.getCode().equals(code)) {
 				deliverers.remove(del);
-				
-				save(delFile,deliverers);
+
+				save(delFile, deliverers);
 				return true;
 			}
 		}
@@ -254,8 +256,8 @@ public class WebShopDAO {
 			if (del.getCode().equals(code)) {
 				int index = deliverers.indexOf(del);
 				deliverers.set(index, updatedDel);
-				
-				save(delFile,deliverers);
+
+				save(delFile, deliverers);
 				return true;
 			}
 		}
@@ -307,8 +309,8 @@ public class WebShopDAO {
 			if (store.getCode().equals(code)) {
 				int index = stores.indexOf(store);
 				stores.set(index, updatedStore);
-				
-				save(storesFile,stores);
+
+				save(storesFile, stores);
 			}
 		}
 	}
@@ -318,8 +320,8 @@ public class WebShopDAO {
 		for (Store store : stores) {
 			if (store.getCode().equals(code)) {
 				stores.remove(store);
-				
-				save(storesFile,stores);
+
+				save(storesFile, stores);
 				return true;
 			}
 		}
@@ -350,8 +352,8 @@ public class WebShopDAO {
 		for (Store store : stores) {
 			if (store.getCode().equals(storeCode)) {
 				store.addProduct(product);
-				
-				save(storesFile,stores);
+
+				save(storesFile, stores);
 				return true;
 			}
 		}
@@ -365,7 +367,7 @@ public class WebShopDAO {
 				for (Product product : store.getProducts()) {
 					if (product.getCode().equals(productCode)) {
 						store.removeProduct(product);
-						
+
 						save(storesFile, stores);
 						return true;
 					}
@@ -407,8 +409,8 @@ public class WebShopDAO {
 					if (product.getCode().equals(productCode)) {
 						int index = products.indexOf(product);
 						products.set(index, updatedProduct);
-						
-						save(storesFile,stores);
+
+						save(storesFile, stores);
 						return true;
 					}
 				}
