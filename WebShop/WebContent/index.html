@@ -40,7 +40,11 @@
 			dataType: 'text'
 		})
 		.done(function(data){
-			alert(data);
+			if(data == "OK"){
+				//Poruka o uspesnosti
+			}else{
+				//Poruka o gresci
+			}
 		})
 		.fail(function(data, status){
 			alert(status);
@@ -59,7 +63,11 @@
 			dataType: 'text'
 		})
 		.done(function(data){
-			alert(data);
+			if(data == "OK"){
+				window.location = "home.html";
+			}else{
+				// Prikazi poruku o gresci
+			}
 		})
 		.fail(function(data, status){
 			alert(status);
