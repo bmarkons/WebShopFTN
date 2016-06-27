@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Welcome to WebShop!</title>
+	<meta charset="UTF-8">
+	<title>Welcome to WebShop!</title>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
-<script>
-	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+	<script>
 	$(document).ready(function(){
 		$.ajax({
 			type: 'GET',
@@ -14,23 +13,23 @@
 			dataType: "json",
 			success: function(data){
 				$.each(data, function(index, value) {
-				     $('#countrySelect').append($("<option></option>").attr("value",value).text(value)); 
+					$('#countrySelect').append($("<option></option>").attr("value",value).text(value)); 
 				});
 			}
 		});
 		$("#registerForm").submit(register);
-		$("#loginForm").submit(login);
+		//$("#loginForm").submit(login);
 	});
 	function register(){
 		var user = {
-				username: $("#registerForm input[name='username']").val(),
-				password: $("#registerForm input[name='password']").val(),
-				email: $("#registerForm input[name='email']").val(),
-				name: $("#registerForm input[name='name']").val(),
-				surname: $("#registerForm input[name='surname']").val(),
-				address: $("#registerForm input[name='address']").val(),
-				telephone: $("#registerForm input[name='telephone']").val(),
-				country: $("#countrySelect").val()
+			username: $("#registerForm input[name='username']").val(),
+			password: $("#registerForm input[name='password']").val(),
+			email: $("#registerForm input[name='email']").val(),
+			name: $("#registerForm input[name='name']").val(),
+			surname: $("#registerForm input[name='surname']").val(),
+			address: $("#registerForm input[name='address']").val(),
+			telephone: $("#registerForm input[name='telephone']").val(),
+			country: $("#countrySelect").val()
 		};
 		$.ajax({
 			type: 'POST',
@@ -53,8 +52,8 @@
 	}
 	function login(){
 		var user = {
-				username: $("#loginForm input[name='username']").val(),
-				password: $("#loginForm input[name='password']").val()
+			username: $("#loginForm input[name='username']").val(),
+			password: $("#loginForm input[name='password']").val()
 		};
 		$.ajax({
 			type: 'POST',
@@ -74,32 +73,95 @@
 		});
 		return false;
 	}
-	
-</script>
+
+	</script>
 </head>
-<body>
+<body ng-app="myApp">
 
-<h3>Register to web shop</h3>
-<form id="registerForm" method="post">
- Username: <input type="text" name="username" required/> <br/>
- Password: <input type="password" name="password" required/> <br/>
- E-mail: <input type="text" name="email" required/> <br/>
- Name: <input type="text" name="name"/> <br/>
- Surname: <input type="text" name="surname"/> <br/>
- Address: <input type="text" name="address"/> <br/>
- Telephone: <input type="text" name="telephone"/> <br/>
- Select country: <select id="countrySelect"><option disabled selected> -- select your country -- </option></select> <br/>
- <br/>
- <input type="submit" value="Register"/>
-</form>
+	<h3>Register to web shop</h3>
+	
+	<form id="registerForm" method="post">
+		<table>
+			<tr>
+				<td>Username: </td>
+				<td><input type="text" name="username" required/></td>
+			</tr>
+			<tr>
+				<td>Password: </td>
+				<td><input type="password" name="password" required/></td>
+			</tr>
+			<tr>
+				<td>E-mail: </td>
+				<td><input type="text" name="email" required/></td>
+			</tr>
+			<tr>
+				<td>Name: </td>
+				<td><input type="text" name="name"/></td>
+			</tr>
+			<tr>
+				<td>Surname: </td>
+				<td><input type="text" name="surname"/></td>
+			</tr>
+			<tr>
+				<td>Address:</td>
+				<td><input type="text" name="address"/></td>
+			</tr>
+			<tr>
+				<td>Telephone:</td>
+				<td><input type="text" name="telephone"/></td>
+			</tr>
+			<tr>
+				<td>Select country:</td>
+				<td><select id="countrySelect"><option disabled selected> -- select your country -- </option></select></td>
+			</tr>
+		</table>
+		<br/>
+		<input type="submit" value="Register"/>
+	</form>
 
-<h3>Login to web shop</h3>
-<form id="loginForm">
-	Username: <input type="text" name="username" required/><br/>
- 	Password: <input type="password" name="password" required/><br/>
-	<br/>
- 	<input type="submit" value="Login"/>
-</form>
 
-</body>
-</html>
+	<h3>Login to web shop</h3>
+	<form id="loginForm" action="/WebShop/LoginServlet" method="post">
+		<table>
+			<tr>
+				<td>Username: </td>
+				<td><input type="text" name="username" required/></td>
+			</tr>
+			<tr>
+				<td>Password: </td>
+				<td><input type="password" name="password" required/></td>
+			</tr>
+		</table>
+		<br/>
+		<input type="submit" value="Login"/>
+	</form>
+
+
+	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-animate.min.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-aria.min.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-messages.min.js"></script>
+
+	<!-- Angular Material Library -->
+	<script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc2/angular-material.min.js"></script>
+
+	<!-- Your application bootstrap  -->
+	<script type="text/javascript">    
+    /**
+     * You must include the dependency on 'ngMaterial' 
+     */
+     angular
+     .module('inputIconDemo', ['ngMaterial', 'ngMessages'])
+     .controller('DemoCtrl', function($scope) {
+     	$scope.user = {
+     		name: 'John Doe',
+     		email: '',
+     		phone: '',
+     		address: 'Mountain View, CA',
+     		donation: 1555
+     	};
+     });
+     </script>
+
+ </body>
+ </html>

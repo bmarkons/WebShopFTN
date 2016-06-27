@@ -6,6 +6,8 @@ import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 
+import ftn.ra122013.webshop.beans.SimpleResponse;
+
 public class JSONParser {
 	public static String toJSON(Object obj){
 		String retVal = null;
@@ -23,5 +25,10 @@ public class JSONParser {
 			e.printStackTrace();
 		}
 		return retVal;
+	}
+	
+	public static String getSimpleResponse(String msg){
+		SimpleResponse response = new SimpleResponse(msg);
+		return toJSON(response);
 	}
 }

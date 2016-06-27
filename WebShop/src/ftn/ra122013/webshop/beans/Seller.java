@@ -8,6 +8,7 @@ public class Seller extends User {
 	public Seller(String username, String password, String address, String country, String email, String name,
 			String surname, String telephone) {
 		super(username, password, address, country, email, name, surname, telephone);
+		setType("seller");
 	}
 
 	private Set<Store> store;

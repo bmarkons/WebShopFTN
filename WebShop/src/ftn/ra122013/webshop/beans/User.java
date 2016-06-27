@@ -2,9 +2,6 @@ package ftn.ra122013.webshop.beans;
 
 import java.io.Serializable;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
-@XmlRootElement
 public abstract class User implements Serializable{
 
 	/**
@@ -19,6 +16,7 @@ public abstract class User implements Serializable{
 	private String name;
 	private String surname;
 	private String telephone;
+	private String type;
 
 	public User(String username, String password, String address, String country, String email, String name,
 			String surname, String telephone) {
@@ -54,7 +52,7 @@ public abstract class User implements Serializable{
 		return this.password;
 	}
 
-	public String getPrezime() {
+	public String getSurname() {
 		return this.surname;
 	}
 
@@ -87,7 +85,7 @@ public abstract class User implements Serializable{
 		this.password = value;
 	}
 
-	public void setPrezime(String value) {
+	public void setSurname(String value) {
 		this.surname = value;
 	}
 
@@ -98,6 +96,14 @@ public abstract class User implements Serializable{
 	@Override
 	public String toString() {
 		return "User [username=" + username + ", password=" + password + ", address=" + address + ", country=" + country
-				+ ", email=" + email + ", name=" + name + ", surname=" + surname + ", telephone=" + telephone + "]";
+				+ ", email=" + email + ", name=" + name + ", surname=" + surname + ", type=" + type + ", telephone=" + telephone + "]";
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 }

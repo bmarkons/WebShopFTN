@@ -8,6 +8,7 @@ public class Buyer extends User {
 	public Buyer(String username, String password, String address, String country, String email, String name,
 			String surname, String telephone) {
 		super(username, password, address, country, email, name, surname, telephone);
+		setType("buyer");
 	}
 
 	private static final long serialVersionUID = -7363816313248923679L;

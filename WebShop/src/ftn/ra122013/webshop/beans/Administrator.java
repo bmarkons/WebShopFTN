@@ -8,5 +8,6 @@ public class Administrator extends User {
 	public Administrator(String username, String password, String address, String country, String email, String name,
 			String surname, String telephone) {
 		super(username, password, address, country, email, name, surname, telephone);
+		setType("admin");
 	}
 }

@@ -33,6 +33,8 @@ public class UserService {
 	public String test() {
 		return "Hello Jersey";
 	}
+	
+	
 
 	@GET
 	@Path("/getAll")
@@ -40,7 +42,8 @@ public class UserService {
 	public String getAllUsers() {
 		HttpSession session = this.request.getSession();
 		if (session.getAttribute("user") == null) {
-			return "ERROR. Not logged in";
+			SimpleResponse response = new SimpleResponse("ERROR");
+			return JSONParser.toJSON(response);
 		}
 
 		ArrayList<User> users = DAO.getAllUsers();
