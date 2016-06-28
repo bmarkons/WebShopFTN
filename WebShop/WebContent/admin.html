@@ -4,20 +4,25 @@
 	<meta charset="UTF-8">
 	<title>Administrator login</title>
 
-	<script src = "http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
-	<script src = "http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular-route.min.js"></script>
-	<script type="text/javascript" src="adminApp.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+	<script src ="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+	<script src ="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular-route.min.js"></script>
+	<script type="text/javascript" src="js/functions.js"></script>
+	<script type="text/javascript" src="js/adminApp.js"></script>
 	
 </head>
 <body ng-app="adminApp">
 	<h1>Admin app</h1>
 	<ul>
 		<li><a href="/WebShop/LoginServlet?logout=true">Odjavi se</a></li>
-		<br/><br>
+		<li><a href="/WebShop/admin.html#/profile">Profile</a></li>
+		<br/><br/>
 		<li><a href="/WebShop/admin.html#/users">Users</a></li>
 		<li><a href="/WebShop/admin.html#/products">Products</a></li>
 		<li><a href="/WebShop/admin.html#/purchases">Purchases</a></li>
 		<li><a href="/WebShop/admin.html#/reviews">Reviews</a></li>
+		<li><a href="/WebShop/admin.html#/categories">Categories</a></li>
+		<li><a href="/WebShop/admin.html#/deliverers">Deliverers</a></li>
 	</ul>
 	<div ng-view></div>
 </body>

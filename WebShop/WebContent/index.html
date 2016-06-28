@@ -5,6 +5,7 @@
 	<title>Welcome to WebShop!</title>
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+	<script src="functions.js"></script>
 	<script>
 	$(document).ready(function(){
 		$.ajax({
@@ -17,62 +18,10 @@
 				});
 			}
 		});
-		$("#registerForm").submit(register);
+		//$("#registerForm").submit(register);
 		//$("#loginForm").submit(login);
 	});
-	function register(){
-		var user = {
-			username: $("#registerForm input[name='username']").val(),
-			password: $("#registerForm input[name='password']").val(),
-			email: $("#registerForm input[name='email']").val(),
-			name: $("#registerForm input[name='name']").val(),
-			surname: $("#registerForm input[name='surname']").val(),
-			address: $("#registerForm input[name='address']").val(),
-			telephone: $("#registerForm input[name='telephone']").val(),
-			country: $("#countrySelect").val()
-		};
-		$.ajax({
-			type: 'POST',
-			url: '/WebShop/rest/user/register',
-			//contentType: 'application/json',
-			data: user,
-			dataType: 'text'
-		})
-		.done(function(data){
-			if(data == "OK"){
-				//Poruka o uspesnosti
-			}else{
-				//Poruka o gresci
-			}
-		})
-		.fail(function(data, status){
-			alert(status);
-		});
-		return false;
-	}
-	function login(){
-		var user = {
-			username: $("#loginForm input[name='username']").val(),
-			password: $("#loginForm input[name='password']").val()
-		};
-		$.ajax({
-			type: 'POST',
-			url: '/WebShop/rest/user/login',
-			data: user,
-			dataType: 'text'
-		})
-		.done(function(data){
-			if(data == "OK"){
-				window.location = "home.html";
-			}else{
-				// Prikazi poruku o gresci
-			}
-		})
-		.fail(function(data, status){
-			alert(status);
-		});
-		return false;
-	}
+	
 
 	</script>
 </head>
@@ -116,7 +65,7 @@
 			</tr>
 		</table>
 		<br/>
-		<input type="submit" value="Register"/>
+		<button onclick="return register(true)" value="Register">Register</button>
 	</form>
 
 
@@ -135,33 +84,6 @@
 		<br/>
 		<input type="submit" value="Login"/>
 	</form>
-
-
-	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>
-	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-animate.min.js"></script>
-	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-aria.min.js"></script>
-	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-messages.min.js"></script>
-
-	<!-- Angular Material Library -->
-	<script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc2/angular-material.min.js"></script>
-
-	<!-- Your application bootstrap  -->
-	<script type="text/javascript">    
-    /**
-     * You must include the dependency on 'ngMaterial' 
-     */
-     angular
-     .module('inputIconDemo', ['ngMaterial', 'ngMessages'])
-     .controller('DemoCtrl', function($scope) {
-     	$scope.user = {
-     		name: 'John Doe',
-     		email: '',
-     		phone: '',
-     		address: 'Mountain View, CA',
-     		donation: 1555
-     	};
-     });
-     </script>
 
  </body>
  </html>

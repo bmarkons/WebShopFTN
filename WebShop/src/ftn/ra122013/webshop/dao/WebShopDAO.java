@@ -154,25 +154,34 @@ public class WebShopDAO {
 		save(usersFile, users);
 	}
 
-	public void updateUser(User updatedUser) {
+	public void updateUser(String username, String password, String address, String country, String email, String name, String surname, String telephone) {
 		ArrayList<User> users = (ArrayList<User>) load(usersFile);
 		for (User user : users) {
-			if (user.getUsername().equals(updatedUser.getUsername())) {
-				int index = users.indexOf(user);
-				users.set(index, updatedUser);
+			if (user.getUsername().equals(username)) {
+				user.setPassword(password);
+				user.setAddress(address);
+				user.setCountry(country);
+				user.setEmail(email);
+				user.setName(name);
+				user.setSurname(surname);
+				user.setTelephone(telephone);
 			}
 		}
 		save(usersFile, users);
 	}
 
-	public void removeUser(String username) {
+	public boolean removeUser(String username) {
 		ArrayList<User> users = (ArrayList<User>) load(usersFile);
 		for (User user : users) {
 			if (user.getUsername().equals(username)) {
 				users.remove(user);
+				
+				save(usersFile, users);
+				return true;
 			}
 		}
 		save(usersFile, users);
+		return false;
 	}
 
 	public ArrayList<User> getAllUsers() {

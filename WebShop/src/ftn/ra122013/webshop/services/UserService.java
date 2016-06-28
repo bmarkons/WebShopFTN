@@ -6,6 +6,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -33,8 +34,19 @@ public class UserService {
 	public String test() {
 		return "Hello Jersey";
 	}
-	
-	
+
+	@GET
+	@Path("/me")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String getUser() {
+		HttpSession session = this.request.getSession();
+		User user = (User) session.getAttribute("user");
+		if (user == null) {
+			return "null";
+		}
+		User me = DAO.getUser(user.getUsername());
+		return JSONParser.toJSON(me);
+	}
 
 	@GET
 	@Path("/getAll")
@@ -71,21 +83,35 @@ public class UserService {
 			@FormParam(value = "password") String password, @FormParam(value = "address") String address,
 			@FormParam(value = "country") String country, @FormParam(value = "email") String email,
 			@FormParam(value = "name") String name, @FormParam(value = "surname") String surname,
-			@FormParam(value = "telephone") String telephone) {
-		if (username == null || password == null || email == null) {
+			@FormParam(value = "telephone") String telephone, @FormParam(value = "type") String type) {
+		if (username == null || password == null || email == null || type == null) {
 			return "ERROR";
 		}
-		if (username.equals("") || password.equals("") || email.equals("")) {
+		if (username.equals("") || password.equals("") || email.equals("") || type.equals("")) {
 			return "ERROR";
 		}
 		if (this.DAO.existsUser(username)) {
 			return "ERROR";
 		}
 
-		Buyer newBuyer = new Buyer(username, password, address, country, email, name, surname, telephone);
-		this.DAO.addUser(newBuyer);
+		if (type.equals("buyer")) {
+			Buyer newBuyer = new Buyer(username, password, address, country, email, name, surname, telephone);
+			this.DAO.addUser(newBuyer);
+			return "OK";
+		}
 
-		return "OK";
+		if (type.equals("seller")) {
+			HttpSession session = request.getSession();
+			User user = (User) session.getAttribute("user");
+			if (user instanceof Administrator) {
+				Seller newSeller = new Seller(username, password, address, country, email, name, surname, telephone);
+				DAO.addUser(newSeller);
+				return "OK";
+			}
+		}
+
+		return "ERROR";
+
 	}
 
 	@POST
@@ -114,4 +140,42 @@ public class UserService {
 		return "Unreckognized user";
 	}
 
+	@DELETE
+	@Path("/remove/{username}")
+	@Consumes(value = { "application/x-www-form-urlencoded" })
+	@Produces(MediaType.APPLICATION_JSON)
+	public String removeUser(@PathParam(value = "username") String username) {
+		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute("user");
+		if (user instanceof Administrator || user.getUsername().equals(username)) {
+			if (DAO.removeUser(username)) {
+				return JSONParser.getSimpleResponse("OK");
+			}
+		}
+		return JSONParser.getSimpleResponse("ERROR");
+	}
+	
+	@POST
+	@Path("/update")
+	@Consumes(value = { "application/x-www-form-urlencoded" })
+	@Produces(MediaType.APPLICATION_JSON)
+	public String updateUser(@FormParam(value = "username") String username,
+			@FormParam(value = "password") String password, @FormParam(value = "address") String address,
+			@FormParam(value = "country") String country, @FormParam(value = "email") String email,
+			@FormParam(value = "name") String name, @FormParam(value = "surname") String surname,
+			@FormParam(value = "telephone") String telephone){
+		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute("user");
+		if(!user.getUsername().equals(username)){
+			return JSONParser.getSimpleResponse("ERROR");
+		}
+		if (username == null || password == null || email == null) {
+			return "ERROR";
+		}
+		if (username.equals("") || password.equals("") || email.equals("")) {
+			return "ERROR";
+		}
+		DAO.updateUser(username,password,address,country,email,name,surname,telephone);
+		return JSONParser.getSimpleResponse("OK");
+	}
 }

@@ -1,0 +1,25 @@
+<div>
+	<table>
+		<tr>
+			<td>Name: </td>
+			<td><input type="text" name="name" ng-model="name" required/></td>
+		</tr>
+		<tr>
+			<td>Description: </td>
+			<td><textarea rows="4" cols="50" name="description" ng-model="description"></textarea></td>
+		</tr>
+		<tr>
+			<td>Select countries: </td>
+			<td>
+			<select multiple title="Select countries" id="countries" ng-model="selectedCountries" size="10">
+				<option ng-repeat = "country in countries" value="{{country}}">{{country}}</option>
+			</select>
+			</td>
+		</tr>
+
+	</table>
+	<br>
+	
+	<button ng-click="addDeliverer()">Add deliverer</button>
+	<button onclick="window.location.href='/WebShop/admin.html#/'" value="Quit">Cancel</button>
+</div>

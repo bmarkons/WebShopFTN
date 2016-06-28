@@ -48,7 +48,10 @@ public class LoginServlet extends HttpServlet {
 
 		// LOGOUT
 		if (request.getParameter("logout").equals("true")) {
-			session.invalidate();
+			try {
+				session.invalidate();
+			} catch (Exception ex) {
+			}
 			response.sendRedirect("index.html");
 			return;
 		}

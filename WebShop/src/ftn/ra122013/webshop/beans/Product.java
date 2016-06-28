@@ -14,7 +14,7 @@ public class Product extends Reviewed implements Serializable {
 	private Category category;
 	private String code;
 	private String color;
-	private String dimension;
+	private double dimension;
 	private String name;
 	private String originCountry;
 	private ArrayList picture;
@@ -39,7 +39,7 @@ public class Product extends Reviewed implements Serializable {
 		return this.color;
 	}
 
-	public String getDimension() {
+	public double getDimension() {
 		return this.dimension;
 	}
 
@@ -96,7 +96,7 @@ public class Product extends Reviewed implements Serializable {
 		this.color = value;
 	}
 
-	public void setDimension(String value) {
+	public void setDimension(double value) {
 		this.dimension = value;
 	}
 

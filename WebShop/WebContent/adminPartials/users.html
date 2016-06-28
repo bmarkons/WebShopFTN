@@ -8,6 +8,7 @@
 			<input type="radio" ng-model="userTypeSelected" name="userType" value="seller">Sellers</input><br>
 			<input type="radio" ng-model="userTypeSelected" name="userType" value="admin">Administrators</input><br>
 			Filter users: <input type = "text" ng-model = "userFilter">
+			<a href="/WebShop/admin.html#/addUser">Add user</a>
 		</fieldset>
 	</br>
 	<table>
@@ -20,6 +21,7 @@
 			<th>name</th>
 			<th>surname</th>
 			<th>telephone</th>
+			<th></th>
 		</tr>
 		<tr ng-repeat = "user in users | filter: userFilterFn">
 			<td>{{user.username}}</td>
@@ -30,6 +32,7 @@
 			<td>{{user.name}}</td>
 			<td>{{user.surname}}</td>
 			<td>{{user.telephone}}</td>
+			<td><button ng-click="removeUser(user.username)">Remove</button></td>
 		</tr>
 	</table>
 </div>

@@ -2,8 +2,6 @@ package ftn.ra122013.webshop.beans;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Set;
-import java.util.HashSet;
 
 public class Deliverer implements Serializable {
 	/**
@@ -14,19 +12,14 @@ public class Deliverer implements Serializable {
 	private ArrayList<String> countries;
 	private String description;
 	private String name;
-	// private Set<Purchase> purchase;
-	private ArrayList tariffs;
-
-	public void addCountry(String country) {
-		countries.add(country);
-	}
+	private ArrayList<Tariff> tariffs;
 
 	/* GETTERS */
 	public String getCode() {
 		return this.code;
 	}
 
-	public ArrayList getCountries() {
+	public ArrayList<String> getCountries() {
 		return this.countries;
 	}
 
@@ -41,7 +34,7 @@ public class Deliverer implements Serializable {
 	// public Set<Purchase> getPurchase() {
 	// return this.purchase;
 	// }
-	public ArrayList getTariffs() {
+	public ArrayList<Tariff> getTariffs() {
 		return this.tariffs;
 	}
 
@@ -58,13 +51,22 @@ public class Deliverer implements Serializable {
 		this.name = value;
 	}
 
-	public void setTariffs(ArrayList value) {
+	public void setTariffs(ArrayList<Tariff> value) {
 		this.tariffs = value;
 	}
 
+	public void setCountries(ArrayList<String> countries){
+		this.countries = countries;
+	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		Deliverer del = (Deliverer) obj;
 		return del.getCode().equals(code);
+	}
+	
+	@Override
+	public String toString() {
+		return getName() + "," + getDescription() + "," + getCountries();
 	}
 }
