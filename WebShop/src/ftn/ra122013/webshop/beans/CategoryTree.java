@@ -9,6 +9,10 @@ public class CategoryTree implements Serializable {
 
 	ArrayList<Category> rootCategories = new ArrayList<Category>();
 
+	public ArrayList<Category> getRoots(){
+		return this.rootCategories;
+	}
+	
 	public Category findCategory(String name) {
 		if (name == null) {
 			return null;
@@ -23,15 +27,18 @@ public class CategoryTree implements Serializable {
 		return category;
 	}
 
-	public void add(String parentName, Category newCategory) {
-		if (parentName == null) {
+	public boolean add(String parentName, Category newCategory) {
+		if (parentName.equals("root")) {
 			this.rootCategories.add(newCategory);
-			return;
+			return true;
 		}
 		Category parent = findCategory(parentName);
 		if (parent != null) {
 			parent.addChild(newCategory);
 			newCategory.setParent(parent);
+			return true;
+		}else{
+			return false;
 		}
 	}
 
@@ -39,8 +46,9 @@ public class CategoryTree implements Serializable {
 		Category category = findCategory(categoryName);
 		if (category != null) {
 			Category parent = category.getParent();
-			if (parent == null) {
-				for (Category c : rootCategories) {
+			if (parent.getName().equals("root")) {
+				for (Object obj : rootCategories.toArray()) {
+					Category c = (Category) obj;
 					if (c.getName().equals(categoryName)) {
 						rootCategories.remove(c);
 					}

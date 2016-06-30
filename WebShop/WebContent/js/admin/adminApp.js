@@ -1,4 +1,22 @@
-var adminApp = angular.module("adminApp",['ngRoute']);
+var adminApp = angular.module("adminApp",['ngRoute','ngMaterial','ngMessages', 'material.svgAssetsCache']);
+
+//app.service('editCategoryService', function() {
+//	  var editing;
+//
+//	  var setEditing = function(category) {
+//	      editing = category;
+//	  };
+//
+//	  var getEditing = function(){
+//	      return editing;
+//	  };
+//
+//	  return {
+//	    setEditing: setEditing,
+//	    getEditing: getEditing
+//	  };
+//
+//	});
 
 adminApp.config(['$routeProvider', function($routeProvider) {
 	$routeProvider
@@ -22,7 +40,15 @@ adminApp.config(['$routeProvider', function($routeProvider) {
 		templateUrl: '/WebShop/adminPartials/addDeliverer.html',
 		controller: 'AddDelivererController'
 	})
+	.when('/categories', {
+		templateUrl: '/WebShop/adminPartials/categories.html',
+		controller: 'CategoriesController'
+	})
 	.otherwise({
 		redirectTo: '/'
 	});
 }]);
+
+adminApp.controller('MenuController', function($scope) {
+	$scope.currentNavItem = 'page1';
+});

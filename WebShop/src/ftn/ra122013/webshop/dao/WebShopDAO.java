@@ -112,10 +112,15 @@ public class WebShopDAO {
 		}
 	}
 
-	public void addCategory(Category category, String parentName) {
+	public boolean addCategory(Category category, String parentName) {
 		CategoryTree categories = (CategoryTree) load(catFile);
-		categories.add(parentName, category);
-		save(catFile, categories);
+		if (categories.add(parentName, category)) {
+			save(catFile, categories);
+			return true;
+		} else {
+			return false;
+		}
+
 	}
 
 	public Category removeCategory(String categoryName) {
@@ -154,7 +159,8 @@ public class WebShopDAO {
 		save(usersFile, users);
 	}
 
-	public void updateUser(String username, String password, String address, String country, String email, String name, String surname, String telephone) {
+	public void updateUser(String username, String password, String address, String country, String email, String name,
+			String surname, String telephone) {
 		ArrayList<User> users = (ArrayList<User>) load(usersFile);
 		for (User user : users) {
 			if (user.getUsername().equals(username)) {
@@ -175,7 +181,7 @@ public class WebShopDAO {
 		for (User user : users) {
 			if (user.getUsername().equals(username)) {
 				users.remove(user);
-				
+
 				save(usersFile, users);
 				return true;
 			}

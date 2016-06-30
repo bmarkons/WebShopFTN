@@ -1,6 +1,7 @@
 package ftn.ra122013.webshop.services;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -23,6 +24,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 
 import ftn.ra122013.webshop.beans.*;
 import ftn.ra122013.webshop.dao.*;
+import ftn.ra122013.webshop.json.JSONParser;
 
 @Path("/category")
 public class CategoryService {
@@ -38,13 +40,13 @@ public class CategoryService {
 	@Path("/get/{name}")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces(MediaType.APPLICATION_JSON)
-	public String getCategory(@PathParam("name") String cateogoryName) {
+	public String getCategory(@PathParam("name") String categoryName) {
 		HttpSession session = request.getSession();
 		if (session.getAttribute("user") == null) {
 			return "ERORR. NOT LOGGED IN";
 		}
 
-		Category category = DAO.getCategory(cateogoryName);
+		Category category = DAO.getCategory(categoryName);
 		ObjectMapper maper = new ObjectMapper();
 		String jsonCategory = null;
 		try {
@@ -64,91 +66,88 @@ public class CategoryService {
 
 	@GET
 	@Path("/getAll")
-	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces(MediaType.APPLICATION_JSON)
 	public String getAllCategories() {
 		HttpSession session = request.getSession();
 		if (session.getAttribute("user") == null) {
-			return "ERORR. NOT LOGGED IN";
+			return JSONParser.getSimpleResponse("NOT LOGGED IN");
 		}
 
-		CategoryTree categories = DAO.getAllCategories();
-		ObjectMapper maper = new ObjectMapper();
-		String jsonCategory = null;
-		try {
-			jsonCategory = maper.writeValueAsString(categories);
-		} catch (JsonGenerationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JsonMappingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return jsonCategory;
+		CategoryTree cTree = DAO.getAllCategories();
+		ArrayList<Category> categories = cTree.getRoots();
+
+		String retJson = JSONParser.toJSON(categories);
+		System.out.println(retJson);
+
+		return retJson;
 	}
 
 	@PUT
 	@Path("/add")
-	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.TEXT_PLAIN)
-	public String addCategory(@FormParam("parent") String parent, @FormParam("name") String name,
-			@FormParam("description") String description) {
+	public String addCategory(Category category) {
 		HttpSession session = request.getSession();
 		if (!(session.getAttribute("user") instanceof Administrator)) {
-			return "ERORR. NOT ADMIN";
+			return JSONParser.getSimpleResponse("ERORR. NOT ADMIN");
 		}
 
 		// Validacija unosa; Ime obavezno!
-		if (name == null) {
-			return "ERROR";
+		if (category.getName() == null) {
+			return JSONParser.getSimpleResponse("ERORR");
 		}
-		if (name.equals("")) {
-			return "ERROR";
+		if (category.getName().equals("")) {
+			return JSONParser.getSimpleResponse("ERORR");
 		}
-		if (DAO.existCategory(name)) {
-			return "ERROR";
+		if (DAO.existCategory(category.getName())) {
+			return JSONParser.getSimpleResponse("ERORR");
 		}
-
-		DAO.addCategory(new Category(description, name), parent);
-		return "OK";
+		if(category.getParent() == null){
+			category.setParent(new Category(null, "root"));
+		}
+		
+		if (DAO.addCategory(category, category.getParent().getName())) {
+			return JSONParser.getSimpleResponse("Category '" + category.getName() + "' has been added.");
+		} else {
+			return JSONParser.getSimpleResponse("Error");
+		}
 	}
 
 	@POST
-	@Path("/update/{name}")
-	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	@Produces(MediaType.TEXT_PLAIN)
-	public String updateCategory(@PathParam("name") String categoryName, @FormParam("description") String description,
-			@FormParam("parent") String parentName) {
+	@Path("/update")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public String updateCategory(Category category) {
 		HttpSession session = request.getSession();
 		if (!(session.getAttribute("user") instanceof Administrator)) {
 			return "ERORR. NOT ADMIN";
 		}
-
-		Category updatedCategory = new Category();
-		updatedCategory.setDescription(description);
-		updatedCategory.setParent(new Category(null, parentName));
-		DAO.updateCategory(categoryName, updatedCategory);
-		return "OK";
+		if(category.getName() == null){
+			return JSONParser.getSimpleResponse("ERROR");
+		}
+		if(category.getName().equals("")){
+			return JSONParser.getSimpleResponse("ERROR");
+		}
+		if(category.getParent() == null){
+			category.setParent(new Category(null, "root"));
+		}
+		DAO.updateCategory(category.getName(), category);
+		return JSONParser.getSimpleResponse("OK");
 	}
 
 	@DELETE
-	@Path("/delete/{name}")
-	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	@Produces(MediaType.TEXT_PLAIN)
+	@Path("/remove/{name}")
+	@Produces(MediaType.APPLICATION_JSON)
 	public String deleteCategory(@PathParam("name") String categoryName) {
 		HttpSession session = request.getSession();
 		if (!(session.getAttribute("user") instanceof Administrator)) {
-			return "ERORR. NOT ADMIN";
+			return JSONParser.getSimpleResponse("ERORR. NOT ADMIN");
 		}
-
 		Category removed = DAO.removeCategory(categoryName);
 		if (removed == null) {
-			return "ERROR. Category " + categoryName + " not found.";
+			return JSONParser.getSimpleResponse("ERROR. Category " + categoryName + " not found.");
 		} else {
-			return "OK";
+			return JSONParser.getSimpleResponse("Category '" + categoryName + "' removed.");
 		}
 	}
 }

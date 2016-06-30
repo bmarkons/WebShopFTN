@@ -6,70 +6,82 @@ package ftn.ra122013.webshop.beans;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Category
-implements Serializable {
-    private static final long serialVersionUID = 1335127503884715632L;
-    private String description;
-    private String name;
-    private ArrayList<Category> children;
-    private Category parent;
+import org.codehaus.jackson.annotate.JsonBackReference;
+import org.codehaus.jackson.annotate.JsonManagedReference;
 
-    public Category findCategory(String name) {
-        if (this.name.equals(name)) {
-            return this;
-        }
-        Category category = null;
-        for (Category c : this.children) {
-            category = c.findCategory(name);
-            if (category != null) break;
-        }
-        return category;
-    }
+public class Category implements Serializable {
+	private static final long serialVersionUID = 1335127503884715632L;
+	private String description;
+	private String name;
+	@JsonManagedReference
+	private ArrayList<Category> children;
+	@JsonBackReference
+	private Category parent;
 
-    public Category(String description, String name) {
-        this.description = description;
-        this.name = name;
-    }
+	public Category findCategory(String name) {
+		if (this.name.equals(name)) {
+			return this;
+		}
+		Category category = null;
+		for (Category c : this.children) {
+			category = c.findCategory(name);
+			if (category != null)
+				break;
+		}
+		return category;
+	}
 
-    public Category() {
-    }
+	public Category(String description, String name) {
+		this.description = description;
+		this.name = name;
+	}
 
-    public void addChild(Category child) {
-        this.children.add(child);
-    }
+	public Category() {
+		super();
+	}
 
-    public void removeChild(String categoryName) {
-        for (Category c : this.children) {
-            if (!c.getName().equals(categoryName)) continue;
-            this.children.remove(c);
-        }
-    }
+	public void addChild(Category child) {
+		this.children.add(child);
+	}
 
-    public Category getParent() {
-        return this.parent;
-    }
+	public void removeChild(String categoryName) {
+		for (Object obj : this.children.toArray()) {
+			Category c = (Category) obj;
+			if (c.getName().equals(categoryName)){
+				children.remove(c);
+			}
+		}
+	}
 
-    public String getDescription() {
-        return this.description;
-    }
+	public Category getParent() {
+		return this.parent;
+	}
 
-    public String getName() {
-        return this.name;
-    }
+	public String getDescription() {
+		return this.description;
+	}
 
-    public ArrayList<Category> getChildren() {
-        return this.children;
-    }
+	public String getName() {
+		return this.name;
+	}
 
-    public void setParent(Category value) {
-        this.parent = value;
-    }
+	public ArrayList<Category> getChildren() {
+		return this.children;
+	}
 
-    public void setDescription(String value) {
-        this.description = value;
-    }
+	public void setParent(Category value) {
+		this.parent = value;
+	}
 
-    public boolean equals(Object obj) {
-        return ((Category)obj).getName().equals(this.name);
-    }
+	public void setDescription(String value) {
+		this.description = value;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public boolean equals(Object obj) {
+		return ((Category) obj).getName().equals(this.name);
+	}
 }

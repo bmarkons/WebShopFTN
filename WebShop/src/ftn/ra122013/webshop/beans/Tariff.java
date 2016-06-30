@@ -63,10 +63,6 @@ public class Tariff implements Serializable {
 	public void setPrice(double price) {
 		this.price = price;
 	}
-
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
 	
 	
 }

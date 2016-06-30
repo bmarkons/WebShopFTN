@@ -10,6 +10,24 @@
     <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
   <servlet>
+		<description>
+		</description>
+		<display-name>
+		LoginServlet</display-name>
+		<servlet-name>LoginServlet</servlet-name>
+		<servlet-class>
+		ftn.ra122013.webshop.servlets.LoginServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>
+		HomeServlet</display-name>
+		<servlet-name>HomeServlet</servlet-name>
+		<servlet-class>
+		ftn.ra122013.webshop.servlets.HomeServlet</servlet-class>
+	</servlet>
+  <servlet>
     <servlet-name>Jersey REST Service</servlet-name>
     <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
     <init-param>
@@ -24,6 +42,14 @@
     </init-param>
     <load-on-startup>1</load-on-startup>
   </servlet>
+  <servlet-mapping>
+	  <servlet-name>HomeServlet</servlet-name>
+		<url-pattern>/HomeServlet</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>LoginServlet</servlet-name>
+		<url-pattern>/LoginServlet</url-pattern>
+	</servlet-mapping>
   <servlet-mapping>
     <servlet-name>Jersey REST Service</servlet-name>
     <url-pattern>/rest/*</url-pattern>
