@@ -85,7 +85,7 @@ public class CategoryService {
 	@PUT
 	@Path("/add")
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.TEXT_PLAIN)
+	@Produces(MediaType.APPLICATION_JSON)
 	public String addCategory(Category category) {
 		HttpSession session = request.getSession();
 		if (!(session.getAttribute("user") instanceof Administrator)) {

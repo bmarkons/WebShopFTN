@@ -7,10 +7,11 @@ adminApp.controller('CategoriesController', function($scope,$http,$mdDialog,$mdM
 	};
 	$scope.showDialog = function(ev,type,category) {
 	    var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
+	    var dialogController;
 	    if(type == 'new'){
-	    	dialogController = addDialogController;
+	    	dialogController = addCategoryDialogController;
 	    }else{
-	    	dialogController = editDialogController;
+	    	dialogController = editCategoryDialogController;
 	    	$rootScope.editingCategory = category;
 	    	//editCategoryService.setEditing(category);
 	    }
@@ -52,13 +53,10 @@ adminApp.controller('CategoriesController', function($scope,$http,$mdDialog,$mdM
 			$scope.getAllCategories();
 		});
 	};
-	$scope.edit = function(category){
-		
-	};
 	$scope.getAllCategories();
 });
 
-addDialogController = function($scope, $mdDialog, $http, $rootScope) {
+addCategoryDialogController = function($scope, $mdDialog, $http, $rootScope) {
 	$scope.confirm = 'Add';
 	$scope.disabled = false;
 	$http.get("/WebShop/rest/category/getAll").success( function(response) {
@@ -88,8 +86,8 @@ addDialogController = function($scope, $mdDialog, $http, $rootScope) {
 	  };
 };
 
-editDialogController = function($scope, $mdDialog, $http, $rootScope) {
-	$scope.confirm = 'Save changes';
+editCategoryDialogController = function($scope, $mdDialog, $http, $rootScope) {
+	$scope.confirm = 'Edit';
 	$scope.disabled = true;
 	$scope.newcategory = angular.fromJson(angular.toJson($rootScope.editingCategory));
 	$http.get("/WebShop/rest/category/getAll").success( function(response) {

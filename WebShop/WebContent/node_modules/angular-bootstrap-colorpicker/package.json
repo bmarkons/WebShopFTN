@@ -1,0 +1,69 @@
+{
+  "name": "angular-bootstrap-colorpicker",
+  "version": "3.0.25",
+  "description": "Native AngularJS colorpicker directive",
+  "main": "js/bootstrap-colorpicker-module.js",
+  "directories": {
+    "test": "test"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.0",
+    "gulp-jshint": "^1.11.2",
+    "gulp-less": "^3.0.3",
+    "gulp-minify-css": "^1.2.1",
+    "gulp-rename": "^1.2.2",
+    "gulp-uglify": "^1.4.0",
+    "jasmine-core": "^2.3.4",
+    "karma": "^0.13.9",
+    "karma-chrome-launcher": "^0.2.0",
+    "karma-cli": "0.1.0",
+    "karma-coverage": "^0.5.1",
+    "karma-firefox-launcher": "^0.1.6",
+    "karma-jasmine": "^0.3.6"
+  },
+  "scripts": {
+    "test": "karma start test/karma.conf.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/buberdds/angular-bootstrap-colorpicker.git"
+  },
+  "keywords": [
+    "angular",
+    "color picker",
+    "bootstrap"
+  ],
+  "author": {
+    "name": "Michal Zielenkiewicz"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/buberdds/angular-bootstrap-colorpicker/issues"
+  },
+  "homepage": "https://github.com/buberdds/angular-bootstrap-colorpicker",
+  "gitHead": "7d1089d52729d3e9eae3765417ea4d99573afb36",
+  "_id": "angular-bootstrap-colorpicker@3.0.25",
+  "_shasum": "c54db1b068ab5d8791af1688633cb17ead551f49",
+  "_from": "angular-bootstrap-colorpicker@latest",
+  "_npmVersion": "3.3.12",
+  "_nodeVersion": "5.4.0",
+  "_npmUser": {
+    "name": "buberdds",
+    "email": "michziel@gmail.com"
+  },
+  "dist": {
+    "shasum": "c54db1b068ab5d8791af1688633cb17ead551f49",
+    "tarball": "https://registry.npmjs.org/angular-bootstrap-colorpicker/-/angular-bootstrap-colorpicker-3.0.25.tgz"
+  },
+  "maintainers": [
+    {
+      "name": "buberdds",
+      "email": "michziel@gmail.com"
+    }
+  ],
+  "_npmOperationalInternal": {
+    "host": "packages-12-west.internal.npmjs.com",
+    "tmp": "tmp/angular-bootstrap-colorpicker-3.0.25.tgz_1458556924879_0.35609766794368625"
+  },
+  "_resolved": "https://registry.npmjs.org/angular-bootstrap-colorpicker/-/angular-bootstrap-colorpicker-3.0.25.tgz"
+}

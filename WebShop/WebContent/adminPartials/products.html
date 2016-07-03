@@ -1,0 +1,26 @@
+<div>
+	<md-button class="md-raised md-primary" ng-click="showDialog($event,'new')">New product</md-button>
+
+	<md-content>
+      <md-list flex>
+        <md-subheader class="md-no-sticky">Product list</md-subheader>
+        <h2 ng-if="products == undefined || products.length == 0">There is no products</h2>
+        <md-list-item style="background-color: {{product.color}};" class="md-3-line" ng-repeat="product in products" ng-click="showDialog($event,'edit',product)">
+          <div class="md-list-item-text" layout="column" >
+            <h2>{{ product.name }}</h3>
+            <md-button class="md-warn" ng-click="remove(product.code)">Remove</md-button>
+            <table>
+            	<tr><td>Store:</td><td>{{ product.store }}</td></tr>
+            	<tr><td>Size:</td><td>{{ product.dimension }} m<sup>2</sup></td></tr>
+            	<tr><td>Origin country:</td><td>{{product.country}}</td></tr>
+            	<tr><td>Weight:</td><td>{{product.weight}} kg</td></tr>
+            	<tr><td>Producer:</td><td>{{product.producer}}</td></tr>
+            	<tr><td>Unit price:</td><td>{{product.unitPrice}}</td></tr>
+            	<tr><td>Category:</td><td>{{product.categoryName}}</td></tr>
+            	<tr><td>Quantity:</td><td>{{product.quantity}}</td></tr>
+            </table>
+
+          </div>
+        </md-list-item>
+        <md-divider ></md-divider>
+</div>

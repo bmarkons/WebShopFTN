@@ -1,0 +1,23 @@
+<div>
+	<md-button class="md-raised md-primary" ng-click="showDialog($event,'new')">New store</md-button>
+	<md-content>
+      <md-list flex>
+        <md-subheader class="md-no-sticky">Store list</md-subheader>
+        <h2 ng-if="stores == undefined || stores.length == 0">There is no stores</h2>
+        <md-list-item class="md-3-line" ng-repeat="store in stores" ng-click="showDialog($event,'edit',store)">
+          <div class="md-list-item-text" layout="column">
+            <h2>{{ store.name }}</h3>
+            <md-button class="md-warn" ng-click="remove(store.code)">Remove</md-button>
+            <table>
+            	<tr><td>Address:</td><td>{{ store.address }}</td></tr>
+            	<tr><td>Country:</td><td>{{store.country}}</td></tr>
+            	<tr><td>Phone:</td><td>{{store.telephone}}</td></tr>
+            	<tr><td>Email:</td><td>{{store.email}}</td></tr>
+            	<tr><td>Seller:</td><td>{{store.seller}}</td></tr>
+            	<tr><td>Rating:</td><td></td></tr>
+            </table>
+
+          </div>
+        </md-list-item>
+        <md-divider ></md-divider>
+</div>

@@ -28,6 +28,9 @@
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/oauth-client-1.19.1.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/oauth-server-1.19.1.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/oauth-signature-1.19.1.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jackson-annotations-2.7.0.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jackson-databind-2.3.1.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/mimepull-1.9.3.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jre7"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

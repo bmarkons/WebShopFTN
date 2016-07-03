@@ -312,18 +312,26 @@ public class WebShopDAO {
 		return (ArrayList<Store>) load(storesFile);
 	}
 
-	public void addStore(Store newStore) {
+	public boolean addStore(Store newStore) {
+		if (existsStore(null, newStore.getName())) {
+			return false;
+		}
 		ArrayList<Store> stores = (ArrayList<Store>) load(storesFile);
+		newStore.setCode(generateStoreCode());
 		stores.add(newStore);
 		save(storesFile, stores);
+		return true;
 	}
 
-	public void updateStore(String code, Store updatedStore) {
+	public void updateStore(Store updatedStore) {
 		ArrayList<Store> stores = (ArrayList<Store>) load(storesFile);
 		for (Store store : stores) {
-			if (store.getCode().equals(code)) {
-				int index = stores.indexOf(store);
-				stores.set(index, updatedStore);
+			if (store.getCode().equals(updatedStore.getCode())) {
+				store.setAddress(updatedStore.getAddress());
+				store.setCountry(updatedStore.getCountry());
+				store.setEmail(updatedStore.getEmail());
+				store.setTelephone(updatedStore.getTelephone());
+				store.setSeller(updatedStore.getSeller());
 
 				save(storesFile, stores);
 			}
@@ -363,10 +371,12 @@ public class WebShopDAO {
 	}
 
 	public boolean addProduct(String storeCode, Product product) {
+		product.setCode(generateProductCode());
 		ArrayList<Store> stores = (ArrayList<Store>) load(storesFile);
 		for (Store store : stores) {
 			if (store.getCode().equals(storeCode)) {
 				store.addProduct(product);
+				product.setStore(storeCode);
 
 				save(storesFile, stores);
 				return true;
@@ -375,21 +385,20 @@ public class WebShopDAO {
 		return false;
 	}
 
-	public boolean removeProduct(String storeCode, String productCode) {
+	public boolean removeProduct(String productCode) {
 		ArrayList<Store> stores = (ArrayList<Store>) load(storesFile);
 		for (Store store : stores) {
-			if (store.getCode().equals(storeCode)) {
-				for (Product product : store.getProducts()) {
-					if (product.getCode().equals(productCode)) {
-						store.removeProduct(product);
+			for (Product product : store.getProducts()) {
+				if (product.getCode().equals(productCode)) {
+					store.removeProduct(product);
 
-						save(storesFile, stores);
-						return true;
-					}
+					save(storesFile, stores);
+					return true;
 				}
 			}
 		}
 		return false;
+
 	}
 
 	public Product getProduct(String storeCode, String productCode) {
@@ -415,15 +424,21 @@ public class WebShopDAO {
 		return products;
 	}
 
-	public boolean updateProduct(String storeCode, String productCode, Product updatedProduct) {
+	public boolean updateProduct(String storeCode, Product updatedProduct) {
+		String productCode = updatedProduct.getCode();
 		ArrayList<Store> stores = (ArrayList<Store>) load(storesFile);
 		for (Store store : stores) {
 			if (store.getCode().equals(storeCode)) {
 				ArrayList<Product> products = store.getProducts();
 				for (Product product : products) {
 					if (product.getCode().equals(productCode)) {
-						int index = products.indexOf(product);
-						products.set(index, updatedProduct);
+						product.setName(updatedProduct.getName());
+						product.setDimension(updatedProduct.getDimension());
+						product.setCountry(updatedProduct.getOriginCountry());
+						product.setProducer(updatedProduct.getProducer());
+						product.setUnitPrice(updatedProduct.getUnitPrice());
+						product.setCategoryName(updatedProduct.getCategoryName());
+						product.setQuantity(updatedProduct.getQuantity());
 
 						save(storesFile, stores);
 						return true;
@@ -611,6 +626,17 @@ public class WebShopDAO {
 			}
 		}
 
+		return false;
+	}
+
+	public boolean isAuthorizedSeller(User user, String storeCode) {
+		if (!(user instanceof Seller)) {
+			return false;
+		}
+		Store store = getStore(storeCode);
+		if (store.getSeller().equals(user.getUsername())) {
+			return true;
+		}
 		return false;
 	}
 }

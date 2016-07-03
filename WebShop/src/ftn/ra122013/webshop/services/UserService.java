@@ -63,6 +63,26 @@ public class UserService {
 	}
 
 	@GET
+	@Path("/sellers")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String getAllSellers(){
+		HttpSession session = this.request.getSession();
+		if (session.getAttribute("user") == null) {
+			SimpleResponse response = new SimpleResponse("ERROR");
+			return JSONParser.toJSON(response);
+		}
+		ArrayList<User> sellers = new ArrayList<User>();
+		ArrayList<User> users = DAO.getAllUsers();
+		for(User user : users){
+			if(user instanceof Seller){
+				sellers.add(user);
+			}
+		}
+		
+		return JSONParser.toJSON(sellers);
+	}
+	
+	@GET
 	@Path("/get/{username}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public String getUser(@PathParam("username") String username) {

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import org.codehaus.jackson.annotate.JsonBackReference;
 import org.codehaus.jackson.annotate.JsonManagedReference;
 
+
 public class Category implements Serializable {
 	private static final long serialVersionUID = 1335127503884715632L;
 	private String description;

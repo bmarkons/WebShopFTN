@@ -1,5 +1,4 @@
 package ftn.ra122013.webshop.beans;
-import java.util.Set;
 
 public class Seller extends User {
 
@@ -11,15 +10,15 @@ public class Seller extends User {
 		setType("seller");
 	}
 
-	private Set<Store> store;
-
-	public void addStore(Store store) {
-		// TODO implement this operation
-		throw new UnsupportedOperationException("not implemented");
-	}
-
-	public Set<Store> getStore() {
-		return this.store;
-	}
+//	private Set<Store> store;
+//
+//	public void addStore(Store store) {
+//		// TODO implement this operation
+//		throw new UnsupportedOperationException("not implemented");
+//	}
+//
+//	public Set<Store> getStore() {
+//		return this.store;
+//	}
 
 }

@@ -1,22 +1,12 @@
-var adminApp = angular.module("adminApp",['ngRoute','ngMaterial','ngMessages', 'material.svgAssetsCache']);
+var adminApp = angular.module("adminApp",['ngRoute','ngMaterial','ngMessages', 'material.svgAssetsCache','mdColorPicker','lfNgMdFileInput']);
 
-//app.service('editCategoryService', function() {
-//	  var editing;
-//
-//	  var setEditing = function(category) {
-//	      editing = category;
-//	  };
-//
-//	  var getEditing = function(){
-//	      return editing;
-//	  };
-//
-//	  return {
-//	    setEditing: setEditing,
-//	    getEditing: getEditing
-//	  };
-//
-//	});
+adminApp.service('Countries', function($http) {
+	   
+	   this.getAll = function() {
+		   return  $http.get("/WebShop/rest/admin/getCountries");
+	   }
+
+});
 
 adminApp.config(['$routeProvider', function($routeProvider) {
 	$routeProvider
@@ -43,6 +33,14 @@ adminApp.config(['$routeProvider', function($routeProvider) {
 	.when('/categories', {
 		templateUrl: '/WebShop/adminPartials/categories.html',
 		controller: 'CategoriesController'
+	})
+	.when('/stores', {
+		templateUrl: '/WebShop/adminPartials/stores.html',
+		controller: 'StoresController'
+	})
+	.when('/products', {
+		templateUrl: '/WebShop/adminPartials/products.html',
+		controller: 'ProductsController'
 	})
 	.otherwise({
 		redirectTo: '/'

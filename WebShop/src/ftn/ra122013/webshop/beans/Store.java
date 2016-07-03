@@ -3,6 +3,11 @@ package ftn.ra122013.webshop.beans;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+import org.codehaus.jackson.annotate.JsonManagedReference;
+
+@XmlRootElement
 public class Store extends Reviewed implements Serializable {
 
 	/**
@@ -14,12 +19,11 @@ public class Store extends Reviewed implements Serializable {
 	private String country;
 	private String email;
 	private String name;
-	// private ArrayList<Purchase> purchase;
 	private double rate;
-	private Seller seller;
+	private String seller;
 	private String telephone;
 	private ArrayList<ActionSale> actionSales;
-	private ArrayList<Product> products;
+	private ArrayList<Product> products = new ArrayList<Product>();
 
 	/* CUSTOM METHODS */
 	public void addProduct(Product product) {
@@ -72,7 +76,7 @@ public class Store extends Reviewed implements Serializable {
 		return this.rate;
 	}
 
-	public Seller getSeller() {
+	public String getSeller() {
 		return this.seller;
 	}
 
@@ -113,8 +117,8 @@ public class Store extends Reviewed implements Serializable {
 		this.rate = value;
 	}
 
-	public void setSeller(Seller value) {
-		this.seller = value;
+	public void setSeller(String sellerUsername) {
+		this.seller = sellerUsername;
 	}
 
 	public void setTelephone(String value) {
