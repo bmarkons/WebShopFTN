@@ -1,7 +1,12 @@
 package ftn.ra122013.webshop.services;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.ServletContext;
@@ -18,25 +23,30 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.tomcat.util.codec.binary.Base64;
+import org.apache.tomcat.util.http.fileupload.FileUtils;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
+import org.apache.*;
+
 import com.sun.jersey.multipart.FormDataBodyPart;
 import com.sun.jersey.multipart.FormDataMultiPart;
-import com.sun.jersey.multipart.FormDataParam;
 
 import ftn.ra122013.webshop.beans.Administrator;
 import ftn.ra122013.webshop.beans.Product;
 import ftn.ra122013.webshop.beans.User;
 import ftn.ra122013.webshop.dao.WebShopDAO;
+import ftn.ra122013.webshop.json.Image;
 import ftn.ra122013.webshop.json.JSONParser;
 
 @Path("/product")
 public class ProductService {
 
-	WebShopDAO DAO = WebShopDAO.getInstance();
-
 	@Context
 	HttpServletRequest request;
 	@Context
 	ServletContext ctx;
+
+	WebShopDAO DAO = WebShopDAO.getInstance();
 
 	@POST
 	@Path("/rate")
@@ -70,8 +80,13 @@ public class ProductService {
 			return JSONParser.getSimpleResponse("ERORR. YOU ARE NOT ADMIN OR AUTHORIZED SELLER.");
 		}
 
-		if (DAO.addProduct(storeCode, product)) {
-			return JSONParser.getSimpleResponse("OK");
+		if (DAO.addProduct(storeCode, product, ctx)) {
+			final Product p = product;
+			Object retVal = new Object() {
+				public String msg = "OK";
+				public String code = p.getCode();
+			};
+			return JSONParser.toJSON(retVal);
 		} else {
 			return JSONParser.getSimpleResponse("ERROR");
 		}
@@ -98,16 +113,16 @@ public class ProductService {
 	@DELETE
 	@Path("/remove/{code}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String removeProduct(@PathParam("code") String code){
+	public String removeProduct(@PathParam("code") String code) {
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("user");
 		if (!(user instanceof Administrator) && !DAO.isAuthorizedSeller(user, code)) {
 			return JSONParser.getSimpleResponse("ERORR. YOU ARE NOT ADMIN OR AUTHORIZED SELLER.");
 		}
-		
-		if(DAO.removeProduct(code)){
+
+		if (DAO.removeProduct(code, ctx)) {
 			return JSONParser.getSimpleResponse("OK");
-		}else{
+		} else {
 			return JSONParser.getSimpleResponse("ERROR");
 		}
 	}
@@ -116,8 +131,108 @@ public class ProductService {
 	@Path("/upload")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Produces(MediaType.APPLICATION_JSON)
-	public String upFile(FormDataMultiPart multiPart) {
-		System.out.println("marko");
+	public String uploadFile(FormDataMultiPart multiPart) {
+		// product code
+		FormDataBodyPart codeField = multiPart.getField("code");
+		String productCode = codeField.getValue();
+		// video file
+		FormDataBodyPart videoField = multiPart.getField("videofile");
+		InputStream videoStream = null;
+		if (videoField != null) {
+			videoStream = videoField.getValueAs(InputStream.class);
+		}
+		// image files
+		List<FormDataBodyPart> fields = multiPart.getFields("imagefiles");
+		ArrayList<InputStream> imageStreams = new ArrayList<InputStream>();
+		for (FormDataBodyPart field : fields) {
+			InputStream is = field.getValueAs(InputStream.class);
+			imageStreams.add(is);
+		}
+
+		// save files
+		saveFiles(videoStream, imageStreams, productCode);
+
 		return JSONParser.getSimpleResponse("OK");
+	}
+
+	@GET
+	@Path("/getmedia/{code}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String getImages(@PathParam("code") String code) {
+		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute("user");
+		if (user == null) {
+			return JSONParser.getSimpleResponse("ERROR");
+		}
+
+		HashMap<String, String> imgMap = new HashMap<String, String>();
+
+		// System.out.println(ctx.getRealPath("/media/" + code));
+		File folder = new File(ctx.getRealPath("/media/" + code));
+		File[] mediaFiles = folder.listFiles();
+		String vid = null;
+		for (File media : mediaFiles) {
+			if (media.getName().contains(".image")) {
+				try {
+					String imgBase64 = Base64.encodeBase64String(Files.readAllBytes(media.toPath()));
+					imgMap.put(media.getName(), imgBase64);
+					// imgs.add(imgBase64);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			} else if (media.getName().contains(".video")) {
+				// TODO
+			}
+		}
+		ArrayList<Image> imgs = new ArrayList<Image>();
+		for (String name : imgMap.keySet()) {
+			Image i = new Image();
+			i.name = name;
+			i.data = imgMap.get(name);
+			imgs.add(i);
+		}
+		final ArrayList<Image> slike = imgs;
+		Object retVal = new Object() {
+			public ArrayList<Image> images = slike;
+			// Fix
+			public String video = null;
+		};
+
+		return JSONParser.toJSON(retVal);
+	}
+
+	@DELETE
+	@Path("/removeimg/{code}/{name}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String removeImage(@PathParam("code") String code,@PathParam("name") String name){
+		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute("user");
+		Product product = DAO.getProduct(code);
+		String storeCode = product.getStore();
+		if (!(user instanceof Administrator) && !DAO.isAuthorizedSeller(user, storeCode)) {
+			return JSONParser.getSimpleResponse("ERROR");
+		}
+		
+		if(product.removeImage(name, ctx)){
+			return JSONParser.getSimpleResponse("Image '" + name + "' removed.");
+		}else{
+			return JSONParser.getSimpleResponse("not removed");
+		}
+	}
+
+	private void saveFiles(InputStream videoStream, ArrayList<InputStream> imageStreams, String productCode) {
+		if (videoStream == null && imageStreams.isEmpty()) {
+			return;
+		}
+		Product product = DAO.getProduct(productCode);
+		if (product == null) {
+			return;
+		}
+		if (videoStream != null) {
+			product.setVideo(videoStream, ctx);
+		}
+		for (InputStream is : imageStreams) {
+			product.addImage(is, ctx);
+		}
 	}
 }

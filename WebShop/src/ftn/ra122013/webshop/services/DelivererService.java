@@ -30,12 +30,14 @@ import ftn.ra122013.webshop.json.JSONParser;
 @Path("/deliverer")
 public class DelivererService {
 
-	WebShopDAO DAO = WebShopDAO.getInstance();
+	
 
 	@Context
 	HttpServletRequest request;
 	@Context
 	ServletContext ctx;
+	
+	WebShopDAO DAO = WebShopDAO.getInstance();
 
 	@GET
 	@Path("/getAll")

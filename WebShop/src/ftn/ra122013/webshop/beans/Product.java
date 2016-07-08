@@ -1,10 +1,19 @@
 package ftn.ra122013.webshop.beans;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Set;
 
+import javax.servlet.ServletContext;
+
 import org.codehaus.jackson.annotate.JsonBackReference;
+
+import ftn.ra122013.webshop.dao.WebShopDAO;
 
 import java.util.HashSet;
 
@@ -28,7 +37,43 @@ public class Product extends Reviewed implements Serializable {
 	private String video;
 	private double weight;
 	private String store;
+	
+	private String getPath(ServletContext ctx){
+		return ctx.getRealPath("/media/" + code + "/");
+	}
 
+	public String generatePath(ServletContext ctx){
+		String path = "pic";
+		int n = 1;
+		while((new File(getPath(ctx),path + n + ".image")).exists()){
+			n++;
+		}
+		return path + n;
+	}
+	
+	public void addImage(InputStream is, ServletContext ctx){
+		String path = generatePath(ctx);
+		File imageFile = new File(getPath(ctx),path + ".image");
+		try {
+			FileOutputStream out = new FileOutputStream(imageFile, false);
+			int read = 0;
+			byte[] bytes = new byte[1024];
+			while ((read = is.read(bytes)) != -1) {
+				out.write(bytes, 0, read);
+			}
+			out.flush();
+			out.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public boolean removeImage(String path, ServletContext context){
+		File imgFile = new File(getPath(context),path);
+		return imgFile.delete();
+	}
+	
 	public String getStore() {
 		return store;
 	}
@@ -135,8 +180,21 @@ public class Product extends Reviewed implements Serializable {
 		this.rate = value;
 	}
 
-	public void setVideo(String value) {
-		this.video = value;
+	public void setVideo(InputStream videoStream, ServletContext ctx) {
+		File videoFile = new File(getPath(ctx),"video" + ".video");
+		try {
+			FileOutputStream out = new FileOutputStream(videoFile, false);
+			int read = 0;
+			byte[] bytes = new byte[1024];
+			while ((read = videoStream.read(bytes)) != -1) {
+				out.write(bytes, 0, read);
+			}
+			out.flush();
+			out.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public void setWeight(double value) {

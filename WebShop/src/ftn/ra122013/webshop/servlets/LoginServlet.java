@@ -21,7 +21,7 @@ import ftn.ra122013.webshop.dao.WebShopDAO;
 public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	private WebShopDAO DAO = WebShopDAO.getInstance();
+	private WebShopDAO DAO;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -34,6 +34,7 @@ public class LoginServlet extends HttpServlet {
 	@Override
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
+		DAO = WebShopDAO.getInstance();
 
 	}
 

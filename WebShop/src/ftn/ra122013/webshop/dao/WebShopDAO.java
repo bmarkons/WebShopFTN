@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.UUID;
 
+import javax.servlet.ServletContext;
+
 import ftn.ra122013.webshop.beans.*;
 
 @SuppressWarnings({ "unchecked" })
@@ -102,7 +104,7 @@ public class WebShopDAO {
 	}
 
 	/*** CATEGORIES ***/
-	public boolean existCategory(String name) {
+	public synchronized boolean existCategory(String name) {
 		CategoryTree categories = (CategoryTree) load(catFile);
 		Category category = categories.findCategory(name);
 		if (category == null) {
@@ -112,7 +114,7 @@ public class WebShopDAO {
 		}
 	}
 
-	public boolean addCategory(Category category, String parentName) {
+	public synchronized boolean addCategory(Category category, String parentName) {
 		CategoryTree categories = (CategoryTree) load(catFile);
 		if (categories.add(parentName, category)) {
 			save(catFile, categories);
@@ -123,14 +125,14 @@ public class WebShopDAO {
 
 	}
 
-	public Category removeCategory(String categoryName) {
+	public synchronized Category removeCategory(String categoryName) {
 		CategoryTree categories = (CategoryTree) load(catFile);
 		Category removed = categories.remove(categoryName);
 		save(catFile, categories);
 		return removed;
 	}
 
-	public void updateCategory(String categoryName, Category updatedCategory) {
+	public synchronized void updateCategory(String categoryName, Category updatedCategory) {
 		CategoryTree categories = (CategoryTree) load(catFile);
 		Category category = categories.findCategory(categoryName);
 		if (category != null) {
@@ -142,24 +144,24 @@ public class WebShopDAO {
 		save(catFile, categories);
 	}
 
-	public Category getCategory(String name) {
+	public synchronized Category getCategory(String name) {
 		CategoryTree categories = (CategoryTree) load(catFile);
 		return categories.findCategory(name);
 	}
 
-	public CategoryTree getAllCategories() {
+	public synchronized CategoryTree getAllCategories() {
 		return (CategoryTree) load(catFile);
 	}
 
 	/*** USERS ***/
-	public void addUser(User newUser) {
+	public synchronized void addUser(User newUser) {
 		ArrayList<User> users = (ArrayList<User>) load(usersFile);
 		users.add(newUser);
 		System.out.println("Registrovan novi korisnik: " + newUser);
 		save(usersFile, users);
 	}
 
-	public void updateUser(String username, String password, String address, String country, String email, String name,
+	public synchronized void updateUser(String username, String password, String address, String country, String email, String name,
 			String surname, String telephone) {
 		ArrayList<User> users = (ArrayList<User>) load(usersFile);
 		for (User user : users) {
@@ -176,7 +178,7 @@ public class WebShopDAO {
 		save(usersFile, users);
 	}
 
-	public boolean removeUser(String username) {
+	public synchronized boolean removeUser(String username) {
 		ArrayList<User> users = (ArrayList<User>) load(usersFile);
 		for (User user : users) {
 			if (user.getUsername().equals(username)) {
@@ -190,11 +192,11 @@ public class WebShopDAO {
 		return false;
 	}
 
-	public ArrayList<User> getAllUsers() {
+	public synchronized ArrayList<User> getAllUsers() {
 		return (ArrayList<User>) load(usersFile);
 	}
 
-	public User getUser(String username) {
+	public synchronized User getUser(String username) {
 		ArrayList<User> users = (ArrayList<User>) load(usersFile);
 		for (User user : users) {
 			System.out.println(user.getUsername());
@@ -205,7 +207,7 @@ public class WebShopDAO {
 		return null;
 	}
 
-	public boolean existsUser(String username) {
+	public synchronized boolean existsUser(String username) {
 		if (getUser(username) == null) {
 			return false;
 		} else {
@@ -214,7 +216,7 @@ public class WebShopDAO {
 	}
 
 	/*** DELIVERERS ***/
-	public String generateDelivererCode() {
+	public synchronized String generateDelivererCode() {
 		String uniqueID = null;
 		do {
 			uniqueID = UUID.randomUUID().toString();
@@ -222,7 +224,7 @@ public class WebShopDAO {
 		return uniqueID;
 	}
 
-	public boolean existsDeliverer(String code) {
+	public synchronized boolean existsDeliverer(String code) {
 		ArrayList<Deliverer> deliverers = (ArrayList<Deliverer>) load(delFile);
 		for (Deliverer del : deliverers) {
 			if (del.getCode().equals(code)) {
@@ -232,7 +234,7 @@ public class WebShopDAO {
 		return false;
 	}
 
-	public Deliverer getDeliverer(String code) {
+	public synchronized Deliverer getDeliverer(String code) {
 		ArrayList<Deliverer> deliverers = (ArrayList<Deliverer>) load(delFile);
 		for (Deliverer del : deliverers) {
 			if (del.getCode().equals(code)) {
@@ -242,17 +244,17 @@ public class WebShopDAO {
 		return null;
 	}
 
-	public ArrayList<Deliverer> getAllDeliverers() {
+	public synchronized ArrayList<Deliverer> getAllDeliverers() {
 		return (ArrayList<Deliverer>) load(delFile);
 	}
 
-	public void addDeliverer(Deliverer newDeliverer) {
+	public synchronized void addDeliverer(Deliverer newDeliverer) {
 		ArrayList<Deliverer> deliverers = (ArrayList<Deliverer>) load(delFile);
 		deliverers.add(newDeliverer);
 		save(delFile, deliverers);
 	}
 
-	public boolean removeDeliverer(String code) {
+	public synchronized boolean removeDeliverer(String code) {
 		ArrayList<Deliverer> deliverers = (ArrayList<Deliverer>) load(delFile);
 		for (Deliverer del : deliverers) {
 			if (del.getCode().equals(code)) {
@@ -265,7 +267,7 @@ public class WebShopDAO {
 		return false;
 	}
 
-	public boolean updateDeliverer(String code, Deliverer updatedDel) {
+	public synchronized boolean updateDeliverer(String code, Deliverer updatedDel) {
 		ArrayList<Deliverer> deliverers = (ArrayList<Deliverer>) load(delFile);
 		for (Deliverer del : deliverers) {
 			if (del.getCode().equals(code)) {
@@ -280,7 +282,7 @@ public class WebShopDAO {
 	}
 
 	/*** STORES ***/
-	public String generateStoreCode() {
+	public synchronized String generateStoreCode() {
 		String uniqueID = null;
 		do {
 			uniqueID = UUID.randomUUID().toString();
@@ -288,7 +290,7 @@ public class WebShopDAO {
 		return uniqueID;
 	}
 
-	public boolean existsStore(String code, String name) {
+	public synchronized boolean existsStore(String code, String name) {
 		ArrayList<Store> stores = (ArrayList<Store>) load(storesFile);
 		for (Store store : stores) {
 			if (store.getCode().equals(code) || store.getName().equals(name)) {
@@ -298,7 +300,7 @@ public class WebShopDAO {
 		return false;
 	}
 
-	public Store getStore(String code) {
+	public synchronized Store getStore(String code) {
 		ArrayList<Store> stores = (ArrayList<Store>) load(storesFile);
 		for (Store store : stores) {
 			if (store.getCode().equals(code)) {
@@ -308,11 +310,11 @@ public class WebShopDAO {
 		return null;
 	}
 
-	public ArrayList<Store> getAllStores() {
+	public synchronized ArrayList<Store> getAllStores() {
 		return (ArrayList<Store>) load(storesFile);
 	}
 
-	public boolean addStore(Store newStore) {
+	public synchronized boolean addStore(Store newStore) {
 		if (existsStore(null, newStore.getName())) {
 			return false;
 		}
@@ -323,7 +325,7 @@ public class WebShopDAO {
 		return true;
 	}
 
-	public void updateStore(Store updatedStore) {
+	public synchronized void updateStore(Store updatedStore) {
 		ArrayList<Store> stores = (ArrayList<Store>) load(storesFile);
 		for (Store store : stores) {
 			if (store.getCode().equals(updatedStore.getCode())) {
@@ -338,7 +340,7 @@ public class WebShopDAO {
 		}
 	}
 
-	public boolean removeStore(String code) {
+	public synchronized boolean removeStore(String code) {
 		ArrayList<Store> stores = (ArrayList<Store>) load(storesFile);
 		for (Store store : stores) {
 			if (store.getCode().equals(code)) {
@@ -352,7 +354,7 @@ public class WebShopDAO {
 	}
 
 	/*** PRODUCTS ***/
-	public String generateProductCode() {
+	public synchronized String generateProductCode() {
 		String uniqueID = null;
 		do {
 			uniqueID = UUID.randomUUID().toString();
@@ -360,7 +362,7 @@ public class WebShopDAO {
 		return uniqueID;
 	}
 
-	private boolean existsProduct(String code) {
+	private synchronized boolean existsProduct(String code) {
 		ArrayList<Product> products = getAllProducts();
 		for (Product product : products) {
 			if (product.getCode().equals(code)) {
@@ -370,14 +372,20 @@ public class WebShopDAO {
 		return false;
 	}
 
-	public boolean addProduct(String storeCode, Product product) {
+	public synchronized boolean addProduct(String storeCode, Product product, ServletContext context) {
 		product.setCode(generateProductCode());
 		ArrayList<Store> stores = (ArrayList<Store>) load(storesFile);
 		for (Store store : stores) {
 			if (store.getCode().equals(storeCode)) {
 				store.addProduct(product);
 				product.setStore(storeCode);
-
+				
+				File folder = new File(context.getRealPath("/media") + "/" + product.getCode());
+				boolean success = folder.mkdirs();
+				if(!success){
+					return false;
+				}
+				
 				save(storesFile, stores);
 				return true;
 			}
@@ -385,13 +393,15 @@ public class WebShopDAO {
 		return false;
 	}
 
-	public boolean removeProduct(String productCode) {
+	public synchronized boolean removeProduct(String productCode, ServletContext context) {
 		ArrayList<Store> stores = (ArrayList<Store>) load(storesFile);
 		for (Store store : stores) {
 			for (Product product : store.getProducts()) {
 				if (product.getCode().equals(productCode)) {
 					store.removeProduct(product);
 
+					deleteDirectory(new File(context.getRealPath("/images") + "/" + product.getCode()));
+					
 					save(storesFile, stores);
 					return true;
 				}
@@ -400,22 +410,37 @@ public class WebShopDAO {
 		return false;
 
 	}
+	// delete folder
+	public synchronized boolean deleteDirectory(File directory) {
+	    if(directory.exists()){
+	        File[] files = directory.listFiles();
+	        if(null!=files){
+	            for(int i=0; i<files.length; i++) {
+	                if(files[i].isDirectory()) {
+	                    deleteDirectory(files[i]);
+	                }
+	                else {
+	                    files[i].delete();
+	                }
+	            }
+	        }
+	    }
+	    return(directory.delete());
+	}
 
-	public Product getProduct(String storeCode, String productCode) {
+	public synchronized Product getProduct(String productCode) {
 		ArrayList<Store> stores = (ArrayList<Store>) load(storesFile);
 		for (Store store : stores) {
-			if (store.getCode().equals(storeCode)) {
-				for (Product product : store.getProducts()) {
-					if (product.getCode().equals(productCode)) {
-						return product;
-					}
+			for (Product product : store.getProducts()) {
+				if (product.getCode().equals(productCode)) {
+					return product;
 				}
 			}
 		}
 		return null;
 	}
 
-	public ArrayList<Product> getAllProducts() {
+	public synchronized ArrayList<Product> getAllProducts() {
 		ArrayList<Store> stores = (ArrayList<Store>) load(storesFile);
 		ArrayList<Product> products = new ArrayList<Product>();
 		for (Store store : stores) {
@@ -424,7 +449,7 @@ public class WebShopDAO {
 		return products;
 	}
 
-	public boolean updateProduct(String storeCode, Product updatedProduct) {
+	public synchronized boolean updateProduct(String storeCode, Product updatedProduct) {
 		String productCode = updatedProduct.getCode();
 		ArrayList<Store> stores = (ArrayList<Store>) load(storesFile);
 		for (Store store : stores) {
@@ -450,7 +475,7 @@ public class WebShopDAO {
 	}
 
 	/*** PURCHASES ***/
-	public String generatePurchaseCode() {
+	public synchronized String generatePurchaseCode() {
 		String uniqueID = null;
 		do {
 			uniqueID = UUID.randomUUID().toString();
@@ -458,7 +483,7 @@ public class WebShopDAO {
 		return uniqueID;
 	}
 
-	private boolean existsPurchase(String code) {
+	private synchronized boolean existsPurchase(String code) {
 		ArrayList<Purchase> purchases = getAllPurchases();
 		for (Purchase purchase : purchases) {
 			if (purchase.getCode().equals(code)) {
@@ -468,7 +493,7 @@ public class WebShopDAO {
 		return false;
 	}
 
-	public boolean addPurchase(Purchase purchase) {
+	public synchronized boolean addPurchase(Purchase purchase) {
 		ArrayList<Purchase> purchases = (ArrayList<Purchase>) load(purFile);
 		for (Purchase p : purchases) {
 			if (p.getCode().equals(purchase.getCode())) {
@@ -480,11 +505,11 @@ public class WebShopDAO {
 		return true;
 	}
 
-	public ArrayList<Purchase> getAllPurchases() {
+	public synchronized ArrayList<Purchase> getAllPurchases() {
 		return (ArrayList<Purchase>) load(purFile);
 	}
 
-	public boolean addComplaint(String purCode, String complaint) {
+	public synchronized boolean addComplaint(String purCode, String complaint) {
 		ArrayList<Purchase> purchases = (ArrayList<Purchase>) load(purFile);
 		for (Purchase purchase : purchases) {
 			if (purchase.getCode().equals(purCode)) {
@@ -498,7 +523,7 @@ public class WebShopDAO {
 	}
 
 	/*** REVIEWS ***/
-	public String generateReviewCode() {
+	public synchronized String generateReviewCode() {
 		String uniqueID = null;
 		do {
 			uniqueID = UUID.randomUUID().toString();
@@ -506,7 +531,7 @@ public class WebShopDAO {
 		return uniqueID;
 	}
 
-	public boolean existsReview(String code) {
+	public synchronized boolean existsReview(String code) {
 		ArrayList<Review> reviews = getAllReviews();
 		for (Review review : reviews) {
 			if (review.getCode().equals(code)) {
@@ -516,7 +541,7 @@ public class WebShopDAO {
 		return false;
 	}
 
-	public ArrayList<Review> getAllReviews() {
+	public synchronized ArrayList<Review> getAllReviews() {
 		ArrayList<Review> reviews = new ArrayList<Review>();
 		ArrayList<Store> stores = (ArrayList<Store>) load(storesFile);
 		for (Store store : stores) {
@@ -528,7 +553,7 @@ public class WebShopDAO {
 		return reviews;
 	}
 
-	public ArrayList<Review> getStoreReviews(String code) {
+	public synchronized ArrayList<Review> getStoreReviews(String code) {
 		ArrayList<Store> stores = (ArrayList<Store>) load(storesFile);
 		for (Store store : stores) {
 			if (store.getCode().equals(code)) {
@@ -538,7 +563,7 @@ public class WebShopDAO {
 		return null;
 	}
 
-	public ArrayList<Review> getProductReview(String code) {
+	public synchronized ArrayList<Review> getProductReview(String code) {
 		ArrayList<Product> products = getAllProducts();
 		for (Product product : products) {
 			if (product.getCode().equals(code)) {
@@ -548,7 +573,7 @@ public class WebShopDAO {
 		return null;
 	}
 
-	public boolean addReview(String code, Review review) {
+	public synchronized boolean addReview(String code, Review review) {
 		if (review instanceof StoreReview) {
 			ArrayList<Store> stores = (ArrayList<Store>) load(storesFile);
 			for (Store store : stores) {
@@ -575,7 +600,7 @@ public class WebShopDAO {
 		return false;
 	}
 
-	public boolean removeReview(String code) {
+	public synchronized boolean removeReview(String code) {
 		ArrayList<Store> stores = getAllStores();
 		for (Store store : stores) {
 			for (Review review : store.getReviews()) {
@@ -601,7 +626,7 @@ public class WebShopDAO {
 		return false;
 	}
 
-	public boolean editCommentReview(String code, String comment) {
+	public synchronized boolean editCommentReview(String code, String comment) {
 		ArrayList<Store> stores = getAllStores();
 		for (Store store : stores) {
 			for (Review review : store.getReviews()) {
@@ -629,7 +654,7 @@ public class WebShopDAO {
 		return false;
 	}
 
-	public boolean isAuthorizedSeller(User user, String storeCode) {
+	public synchronized boolean isAuthorizedSeller(User user, String storeCode) {
 		if (!(user instanceof Seller)) {
 			return false;
 		}

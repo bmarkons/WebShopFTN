@@ -22,12 +22,13 @@ import ftn.ra122013.webshop.json.JSONParser;
 
 @Path(value = "/user")
 public class UserService {
-	WebShopDAO DAO = WebShopDAO.getInstance();
 	@Context
 	HttpServletRequest request;
 	@Context
 	ServletContext ctx;
 
+	WebShopDAO DAO = WebShopDAO.getInstance();
+	
 	@GET
 	@Path(value = "/test")
 	@Produces(value = { "text/plain" })

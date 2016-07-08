@@ -29,12 +29,14 @@ import ftn.ra122013.webshop.json.JSONParser;
 @Path("/category")
 public class CategoryService {
 
-	WebShopDAO DAO = WebShopDAO.getInstance();
+	
 
 	@Context
 	HttpServletRequest request;
 	@Context
 	ServletContext ctx;
+	
+	WebShopDAO DAO = WebShopDAO.getInstance();
 
 	@GET
 	@Path("/get/{name}")

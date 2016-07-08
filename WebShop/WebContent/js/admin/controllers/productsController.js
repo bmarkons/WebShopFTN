@@ -1,10 +1,27 @@
 
 adminApp.controller('ProductsController', function($scope, $http, $mdDialog,$mdMedia, $mdToast, $rootScope) {
 	$scope.getAllProducts = function(){
-		$http.get("/WebShop/rest/product/getAll").success(function(response) {
-			$scope.products = response;
+		$http.get("/WebShop/rest/product/getAll").success(function(products) {
+			$scope.products = products;
+			angular.forEach($scope.products,function(product){
+				$http.get("/WebShop/rest/product/getmedia/" + product.code).success(function(media){
+					product.images = media.images;
+					product.video = media.video;
+				})
+			});
 		});
 	};
+	$scope.removeImage = function(code,name){
+		$http.delete("/WebShop/rest/product/removeimg/" + code + "/" + name).success(function(response){
+			$mdToast.show(
+		  		      $mdToast.simple()
+		  		        .textContent(response.msg)
+		  		        .hideDelay(3000)
+		  		    );
+			$scope.getAllProducts();
+		});
+	};
+	
 	$scope.remove = function(code){
 		$http.delete("/WebShop/rest/product/remove/" + code).success(function(response){
 			$mdToast.show(
@@ -83,6 +100,7 @@ addProductDialogController = function($scope, $mdDialog, $http, $rootScope, Coun
 		}).done(function(data) {
 			if (data.msg == 'OK' && ($scope.imagefiles.length > 0 || $scope.videofile.length > 0)) {
 				var formData = new FormData();
+				formData.append('code', data.code);
 				angular.forEach($scope.imagefiles, function(obj) {
 					formData.append('imagefiles', obj.lfFile);
 				});
@@ -94,8 +112,8 @@ addProductDialogController = function($scope, $mdDialog, $http, $rootScope, Coun
 					headers : {
 						'Content-Type' : undefined
 					}
-				}).then(function(data) {
-					$mdDialog.hide(data.msg + "[upload]");
+				}).then(function(response) {
+					$mdDialog.hide(response.data.msg + "[upload]");
 				}, function(err) {
 					$mdDialog.hide("error [upload]");
 				});
