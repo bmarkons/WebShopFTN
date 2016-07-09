@@ -38,25 +38,27 @@ adminApp.controller('ProductsController', function($scope, $http, $mdDialog,$mdM
 		var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))
 				&& $scope.customFullscreen;
 		var dialogController;
+		dialogTemplate = '/WebShop/adminPartials/newProductDialog.html';
 		if (type == 'new') {
 			dialogController = addProductDialogController;
-		} else {
+		} else if(type == 'image'){
+			dialogController = addImageDialogController;
+			$rootScope.editingProduct = product;
+			dialogTemplate = '/WebShop/adminPartials/imageDialog.html'
+		}else {
 			dialogController = editProductDialogController;
 			$rootScope.editingProduct = product;
 		}
 		$mdDialog.show({
 			controller : dialogController,
-			templateUrl : '/WebShop/adminPartials/newProductDialog.html',
+			templateUrl : dialogTemplate,
 			parent : angular.element(document.body),
 			targetEvent : ev,
 			clickOutsideToClose : true,
 			fullscreen : useFullScreen
 		}).then(function(msg) {
 			$mdToast.show(
-			// var pinTo = $scope.getToastPosition();
-			$mdToast.simple().textContent(msg)
-			// .position(pinTo )
-			.hideDelay(3000));
+			$mdToast.simple().textContent(msg).hideDelay(3000));
 			$scope.getAllProducts();
 		}, function() {
 
@@ -150,6 +152,33 @@ editProductDialogController = function($scope, $mdDialog, $http, $rootScope, Cou
 			$mdDialog.hide(data.msg);
 		}).fail(function(data, status) {
 			$mdDialog.hide(status);
+		});
+	};
+};
+
+addImageDialogController = function($scope, $mdDialog, $http, $rootScope) {
+	
+	$scope.hide = function() {
+		$mdDialog.hide();
+	};
+	$scope.cancel = function() {
+		$mdDialog.cancel();
+	};
+	$scope.add = function() {
+		var formData = new FormData();
+		formData.append('code', $rootScope.editingProduct.code);
+		angular.forEach($scope.imagefiles, function(obj) {
+			formData.append('imagefiles', obj.lfFile);
+		});
+		$http.post('/WebShop/rest/product/upload', formData, {
+			transformRequest : angular.identity,
+			headers : {
+				'Content-Type' : undefined
+			}
+		}).then(function(response) {
+			$mdDialog.hide(response.data.msg);
+		}, function(err) {
+			$mdDialog.hide(err);
 		});
 	};
 };

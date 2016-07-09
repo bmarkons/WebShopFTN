@@ -90,11 +90,7 @@ public class LoginServlet extends HttpServlet {
 		if (loginUser != null) {
 			if (loginUser.getPassword().equals(password)) {
 				session.setAttribute("user", (Object) loginUser);
-				if (loginUser instanceof Administrator) {
-					response.sendRedirect("admin.html");
-				} else {
-					response.sendRedirect("home.html");
-				}
+				response.sendRedirect("admin.html");
 				return;
 			}
 		}

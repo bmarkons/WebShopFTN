@@ -38,11 +38,8 @@ public class HomeServlet extends HttpServlet {
 			return;
 		}
 		User user = (User) session.getAttribute("user");
-		if (user instanceof Administrator) {
-			response.sendRedirect("admin.html");
-		} else {
-			response.getWriter().append("Served at: ").append(request.getContextPath());
-		}
+		response.sendRedirect("admin.html");
+
 	}
 
 }

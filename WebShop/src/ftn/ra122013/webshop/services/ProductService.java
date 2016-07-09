@@ -167,7 +167,7 @@ public class ProductService {
 
 		HashMap<String, String> imgMap = new HashMap<String, String>();
 
-		// System.out.println(ctx.getRealPath("/media/" + code));
+		System.out.println(ctx.getRealPath("/media/" + code));
 		File folder = new File(ctx.getRealPath("/media/" + code));
 		File[] mediaFiles = folder.listFiles();
 		String vid = null;

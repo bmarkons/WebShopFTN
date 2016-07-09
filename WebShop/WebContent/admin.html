@@ -8,7 +8,7 @@
 <!-- 	<link rel="stylesheet" href="node_modules/angular-bootstrap-colorpicker/css/colorpicker.min.css"> -->
 	<link href="node_modules/md-color-picker/dist/mdColorPicker.min.css" rel="stylesheet" />
 	<link rel="stylesheet" href="node_modules/lf-ng-md-file-input/dist/lf-ng-md-file-input.css">
-	
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
 	<script src ="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>
 	<script src ="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-route.min.js"></script>
@@ -22,6 +22,7 @@
 	
 	<script src="js/functions.js"></script>
 	<script src="js/admin/adminApp.js"></script>
+	<script src="js/admin/controllers/mainController.js"></script>
 	<script src="js/admin/controllers/addDelivererController.js"></script>
 	<script src="js/admin/controllers/addUserController.js"></script>
 	<script src="js/admin/controllers/deliverersController.js"></script>
@@ -37,27 +38,97 @@
 
 	
 </head>
-<body ng-app="adminApp">
-		<md-toolbar class="md-theme-light">
-    <h1 class="md-toolbar-tools">
-      <span>Admin app</span>
-    </h1>
-  </md-toolbar>
-	<div ng-controller="MenuController" ng-cloak="" class="navBardemoBasicUsage">
-  		<md-content class="md-padding">
-    		<md-nav-bar md-selected-nav-item="currentNavItem" nav-bar-aria-label="navigation links">
-    			<a href="/WebShop/LoginServlet?logout=true">Odjavi se</a>
-				<a href="/WebShop/admin.html#/profile">Profile</a>
-				<a href="/WebShop/admin.html#/users">Users</a>
-				<a href="/WebShop/admin.html#/stores">Stores</a>
-				<a href="/WebShop/admin.html#/products">Products</a>
-				<a href="/WebShop/admin.html#/purchases">Purchases</a>
-				<a href="/WebShop/admin.html#/reviews">Reviews</a>
-				<a href="/WebShop/admin.html#/categories">Categories</a>
-				<a href="/WebShop/admin.html#/deliverers">Deliverers</a>
-    		</md-nav-bar>
-  		</md-content>
-  	</div>
-	<div ng-view></div>
+<body ng-app="adminApp" ng-controller="MainController">
+	<md-toolbar class="md-theme-light">
+		<div class="md-toolbar-tools">
+			<md-button ng-click="toggleSideNav()" class="md-icon-button" aria-label="Menu">
+				<md-tooltip>
+          			View menu
+        		</md-tooltip>
+          		<md-icon>menu</md-icon>
+        	</md-button>
+        	<h2>
+          <span>WebShop</span>
+        </h2>
+        <span flex></span>
+        <md-button ng-href="/WebShop/admin.html#/profile" aria-label="User account">
+        	<md-tooltip>
+          		Your profile
+        	</md-tooltip>
+          <label>{{user.username}}</label>
+          <md-icon>account_circle</md-icon>
+        </md-button>
+        <md-button ng-href="/WebShop/LoginServlet?logout=true" class="md-icon-button" aria-label="Log out">
+        	<md-tooltip>
+          		Log out
+        	</md-tooltip>
+          <md-icon>exit_to_app</md-icon>
+        </md-button>
+		</div>
+  	</md-toolbar>
+	<md-sidenav md-component-id="left"
+				class="md-sidenav-left"
+				>
+			<md-toolbar class="md-theme-indigo">
+        		<div class="md-toolbar-tools">
+			<md-button ng-click="toggleSideNav()" class="md-icon-button" aria-label="Menu">
+				<md-tooltip>
+          			View menu
+        		</md-tooltip>
+          		<md-icon>menu</md-icon>
+        	</md-button>
+        	<h2>
+          <span>Menu</span>
+        </h2>
+        <span flex></span>
+        <md-button ng-click="toggleSideNav()" ng-href="/WebShop/admin.html#/profile" aria-label="User account">
+        	<md-tooltip>
+          		Your profile
+        	</md-tooltip>
+          <label>{{user.username}}</label>
+          <md-icon>account_circle</md-icon>
+        </md-button>
+        <md-button ng-href="/WebShop/LoginServlet?logout=true" class="md-icon-button" aria-label="Log out">
+        	<md-tooltip>
+          		Log out
+        	</md-tooltip>
+          <md-icon>exit_to_app</md-icon>
+        </md-button>
+		</div>
+      		</md-toolbar>
+     		<md-content layout-padding>
+				<md-button ng-show="isAdmin()" ng-click='toggleSideNav()' ng-href="/WebShop/admin.html#/users" aria-label="User account">
+         			<md-icon>people</md-icon>
+         			<label>Users</label>
+       		</md-button><br/>
+       		<md-button ng-click='toggleSideNav()' ng-href="/WebShop/admin.html#/stores" aria-label="Stores">
+         			<md-icon>store</md-icon>
+         			<label>Stores</label>
+       		</md-button><br/>
+       		<md-button ng-click='toggleSideNav()' ng-href="/WebShop/admin.html#/products" aria-label="Products">
+         			<md-icon>card_giftcard</md-icon>
+         			<label>Products</label>
+       		</md-button><br/>
+       		<md-button ng-click='toggleSideNav()' ng-href="/WebShop/admin.html#/purchases" aria-label="Purchases">
+         			<md-icon>assignment_turned_in</md-icon>
+         			<label ng-if="isAdmin()">Purchases</label>
+         			<label ng-if="isBuyer()">My Purchases</label>
+         			<label ng-if="isSeller()">My Stores Purchases</label>
+       		</md-button><br/>
+       		<md-button ng-click='toggleSideNav()' ng-href="/WebShop/admin.html#/reviews" aria-label="Reviews">
+         			<md-icon>mode_comment</md-icon>
+         			<label>Reviews</label>
+       		</md-button><br/>
+       		<md-button ng-click='toggleSideNav()' ng-href="/WebShop/admin.html#/categories" aria-label="Categories">
+         			<md-icon>flag</md-icon>          	
+         			<label>Categories</label>
+       		</md-button><br/>
+       		<md-button ng-click='toggleSideNav()' ng-href="/WebShop/admin.html#/deliverers" aria-label="Deliverers">
+         			<md-icon>directions_car</md-icon>          			
+         			<label>Deliverers</label>
+       		</md-button><br/>
+     		</md-content>
+ 		</md-sidenav>
+	<section ng-view></section>
 </body>
 </html>

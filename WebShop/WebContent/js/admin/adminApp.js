@@ -2,10 +2,16 @@ var adminApp = angular.module("adminApp",['ngRoute','ngMaterial','ngMessages', '
 
 adminApp.service('Countries', function($http) {
 	   
-	   this.getAll = function() {
-		   return  $http.get("/WebShop/rest/admin/getCountries");
-	   }
+   this.getAll = function() {
+	   return  $http.get("/WebShop/rest/admin/getCountries");
+   }
 
+});
+
+adminApp.service('Auth', function($rootScope,$http){
+	this.getUser = function(){
+		return $http.get("/WebShop/rest/user/me");
+	}
 });
 
 adminApp.config(['$routeProvider', function($routeProvider) {
@@ -45,6 +51,17 @@ adminApp.config(['$routeProvider', function($routeProvider) {
 	.otherwise({
 		redirectTo: '/'
 	});
+}]);
+
+adminApp.run(['$rootScope', '$location', 'Auth', function ($rootScope, $location, Auth) {
+    $rootScope.$on('$routeChangeStart', function (event) {
+    	Auth.getUser().success( function(response) {
+    		if(response == null){
+    			location.href = '/WebShop/HomeServlet';
+    		}
+    		$rootScope.user = response;
+    	});
+    });
 }]);
 
 adminApp.controller('MenuController', function($scope) {

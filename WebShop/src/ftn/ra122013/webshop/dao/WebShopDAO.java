@@ -400,7 +400,7 @@ public class WebShopDAO {
 				if (product.getCode().equals(productCode)) {
 					store.removeProduct(product);
 
-					deleteDirectory(new File(context.getRealPath("/images") + "/" + product.getCode()));
+					deleteDirectory(new File(context.getRealPath("/media") + "/" + product.getCode()));
 					
 					save(storesFile, stores);
 					return true;
