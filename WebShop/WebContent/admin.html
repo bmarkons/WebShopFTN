@@ -5,9 +5,10 @@
 	<title>Administrator login</title>
 
 	<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc2/angular-material.min.css">
-<!-- 	<link rel="stylesheet" href="node_modules/angular-bootstrap-colorpicker/css/colorpicker.min.css"> -->
 	<link href="node_modules/md-color-picker/dist/mdColorPicker.min.css" rel="stylesheet" />
 	<link rel="stylesheet" href="node_modules/lf-ng-md-file-input/dist/lf-ng-md-file-input.css">
+	<link href="node_modules/angular-jk-rating-stars/dist/jk-rating-stars.css" rel="stylesheet" type="text/css" />
+	
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
 	<script src ="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>
@@ -34,11 +35,13 @@
 	
 	<script src="node_modules/md-color-picker/node_modules/tinycolor2/dist/tinycolor-min.js"></script>
 	<script src="node_modules/md-color-picker/dist/mdColorPicker.min.js"></script>
-	<script src="node_modules/lf-ng-md-file-input/dist/lf-ng-md-file-input.js"></script>	
+	<script src="node_modules/lf-ng-md-file-input/dist/lf-ng-md-file-input.js"></script>
+	<script src="node_modules/angular-jk-rating-stars/dist/jk-rating-stars.js"></script>
+		
 
 	
 </head>
-<body ng-app="adminApp" ng-controller="MainController">
+<body ng-app="adminApp" ng-controller="MainController" flex layout="column">
 	<md-toolbar class="md-theme-light">
 		<div class="md-toolbar-tools">
 			<md-button ng-click="toggleSideNav()" class="md-icon-button" aria-label="Menu">
@@ -48,7 +51,7 @@
           		<md-icon>menu</md-icon>
         	</md-button>
         	<h2>
-          <span>WebShop</span>
+          <span>WebShop:{{user.type}}</span>
         </h2>
         <span flex></span>
         <md-button ng-href="/WebShop/admin.html#/profile" aria-label="User account">
@@ -103,7 +106,8 @@
        		</md-button><br/>
        		<md-button ng-click='toggleSideNav()' ng-href="/WebShop/admin.html#/stores" aria-label="Stores">
          			<md-icon>store</md-icon>
-         			<label>Stores</label>
+         			<label ng-if="isAdmin() || isBuyer()">Stores</label>
+         			<label ng-if="isSeller()">My Stores</label>
        		</md-button><br/>
        		<md-button ng-click='toggleSideNav()' ng-href="/WebShop/admin.html#/products" aria-label="Products">
          			<md-icon>card_giftcard</md-icon>
@@ -129,6 +133,6 @@
        		</md-button><br/>
      		</md-content>
  		</md-sidenav>
-	<section ng-view></section>
+	<div flex layout="row" layout-align="center start" ng-view></div>
 </body>
 </html>

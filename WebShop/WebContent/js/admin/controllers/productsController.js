@@ -82,7 +82,16 @@ addProductDialogController = function($scope, $mdDialog, $http, $rootScope, Coun
 		$scope.countries = response;
 	});
 	$http.get("/WebShop/rest/store/getAll").success(function(response) {
-		$scope.stores = response;
+		if($scope.isSeller()){
+			$scope.stores = [];
+			angular.forEach(response,function(store){
+				if($rootScope.user.username == store.seller){
+					$scope.stores.push(store);
+				}
+			});
+		}else{
+			$scope.stores = response;
+		}S
 	});
 	
 	$scope.hide = function() {

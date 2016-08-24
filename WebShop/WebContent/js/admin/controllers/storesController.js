@@ -1,7 +1,19 @@
 adminApp.controller('StoresController', function($scope,$http,$mdDialog,$mdMedia,$mdToast,$rootScope) {
+		$scope.onRating = function(){
+			alert("rated");
+		}
 		$scope.getAllStores = function(){
 			$http.get("/WebShop/rest/store/getAll").success( function(response) {
-				$scope.stores = response;
+				if($scope.isSeller()){
+					$scope.stores = [];
+					angular.forEach(response,function(store){
+						if($rootScope.user.username == store.seller){
+							$scope.stores.push(store);
+						}
+					});
+				}else{
+					$scope.stores = response;
+				}
 			});
 		};
 		$scope.showDialog = function(ev,type,store) {
