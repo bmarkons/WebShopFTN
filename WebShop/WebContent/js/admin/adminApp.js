@@ -1,4 +1,4 @@
-var adminApp = angular.module("adminApp",['ngRoute','ngMaterial','ngMessages', 'material.svgAssetsCache','mdColorPicker','lfNgMdFileInput','jkAngularRatingStars']);
+var adminApp = angular.module("adminApp",['ngRoute','ngMaterial','ngMessages', 'material.svgAssetsCache','mdColorPicker','lfNgMdFileInput','jkAngularRatingStars', 'ui.tree']);
 
 adminApp.service('Countries', function($http) {
 	   

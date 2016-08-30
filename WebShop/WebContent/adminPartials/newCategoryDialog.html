@@ -21,9 +21,9 @@
             <label>Description</label>
             <input ng-model="newcategory.description">
           </md-input-container>
-          <md-input-container class="md-block" flex-gt-sm>
+          <md-input-container ng-show="{{!disabled}}" class="md-block" flex-gt-sm>
             <label>Parent category</label>
-            <md-select ng-model="newcategory.parent.name">
+            <md-select ng-model="newcategory.parent.name" >
             	<md-option value="root">--ROOT--</md-option>
               	<md-option ng-repeat="category in categories" value="{{category.name}}">
                 	{{category.name}}
