@@ -41,7 +41,7 @@ adminApp.controller('CategoriesController', function($scope,$http,$mdDialog,$mdM
 	      $scope.customFullscreen = (wantsFullScreen === true);
 	    });
 	};
-	$scope.remove = function(name){
+	$scope.removeCategory = function(name){
 		$http.delete("/WebShop/rest/category/remove/" + name).success(function(response){
 			$mdToast.show(
 		    		//var pinTo = $scope.getToastPosition();
@@ -53,6 +53,9 @@ adminApp.controller('CategoriesController', function($scope,$http,$mdDialog,$mdM
 			$scope.getAllCategories();
 		});
 	};
+	$scope.newSubItem = function(scope){
+		
+	}
 	$scope.getAllCategories();
 });
 
