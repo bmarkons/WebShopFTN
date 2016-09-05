@@ -1,0 +1,60 @@
+<md-dialog aria-label="Add new store"  ng-cloak>
+<form>
+  <md-toolbar>
+  <div class="md-toolbar-tools">
+    <h2>{{confirm}}ing new store</h2>
+    <span flex></span>
+    <md-button class="md-icon-button" ng-click="cancel()">
+    <md-icon md-svg-src="img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+  </md-button>
+</div>
+</md-toolbar>
+<md-dialog-content>
+<div class="md-dialog-content">
+  <form name="addForm">
+    <md-content layout-padding>
+    <md-input-container class="md-block" flex-gt-sm>
+    <label>Store name</label>
+    <input ng-model="store.name" ng-disabled="{{disabled}}" required>
+  </md-input-container>
+  <md-input-container class="md-block" flex-gt-sm>
+  <label>Address</label>
+  <input ng-model="store.address">
+</md-input-container>
+<md-input-container>
+<label>Country</label>
+<md-select ng-model="store.country">
+<md-option ng-value="country" ng-repeat="country in countries">{{country}}</md-option>
+</md-select> 
+</md-input-container>
+<md-input-container md-no-float class="md-block">
+<label>Telephone</label>
+<md-icon md-svg-src="img/icons/ic_phone_24px.svg"></md-icon>
+<input ng-model="store.telephone" type="text" >
+</md-input-container>
+<md-input-container class="md-block">
+<label>E-mail</label>
+<md-icon md-svg-src="img/icons/ic_email_24px.svg" class="email"></md-icon>
+<input ng-model="store.email" type="email">
+</md-input-container>
+<md-input-container>
+<label>Seller</label>
+<md-select ng-model="store.seller">
+<md-option ng-value="seller.username" ng-repeat="seller in sellers">{{seller.username}}</md-option>
+</md-select> 
+</md-input-container>
+</md-content>
+</form>
+</div>
+</md-dialog-content>
+<md-dialog-actions layout="row">
+<span flex></span>
+<md-button ng-click="cancel()">
+Cancel
+</md-button>
+<md-button ng-disabled="addForm.$invalid" class="md-raised md-primary" ng-click="submit()">
+{{confirm}}
+</md-button>
+</md-dialog-actions>
+</form>
+</md-dialog>

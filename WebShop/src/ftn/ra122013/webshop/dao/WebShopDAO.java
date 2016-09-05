@@ -464,6 +464,7 @@ public class WebShopDAO {
 						product.setUnitPrice(updatedProduct.getUnitPrice());
 						product.setCategoryName(updatedProduct.getCategoryName());
 						product.setQuantity(updatedProduct.getQuantity());
+						product.setVideoUrl(updatedProduct.getVideoUrl());
 
 						save(storesFile, stores);
 						return true;

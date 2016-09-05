@@ -171,7 +171,7 @@ public class ProductService {
 
 		// set video url
 		Product product = DAO.getProduct(productCode);
-		product.setVideo(videoUrl);
+		product.setVideoUrl(videoUrl);
 		
 		return JSONParser.getSimpleResponse("OK");
 	}

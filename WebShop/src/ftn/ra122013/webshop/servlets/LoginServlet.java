@@ -68,11 +68,7 @@ public class LoginServlet extends HttpServlet {
 		User user = (User) session.getAttribute("user");
 
 		if (user != null) {
-			if (user instanceof Administrator) {
-				response.sendRedirect("admin.html");
-			} else {
-				response.sendRedirect("home.html");
-			}
+			response.sendRedirect("webShop.jsp");
 			return;
 		}
 
@@ -90,7 +86,7 @@ public class LoginServlet extends HttpServlet {
 		if (loginUser != null) {
 			if (loginUser.getPassword().equals(password)) {
 				session.setAttribute("user", (Object) loginUser);
-				response.sendRedirect("admin.html");
+				response.sendRedirect("webShop.jsp");
 				return;
 			}
 		}

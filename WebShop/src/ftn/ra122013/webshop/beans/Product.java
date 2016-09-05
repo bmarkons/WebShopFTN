@@ -29,12 +29,11 @@ public class Product extends Reviewed implements Serializable {
 	private double dimension;
 	private String name;
 	private String country;
-	private ArrayList picture;
 	private double unitPrice;
 	private String producer;
 	private double quantity;
 	private double rate;
-	private String video;
+	private String videoUrl;
 	private double weight;
 	private String store;
 	
@@ -107,10 +106,6 @@ public class Product extends Reviewed implements Serializable {
 		return this.country;
 	}
 
-	public ArrayList getPicture() {
-		return this.picture;
-	}
-
 	public double getUnitPrice() {
 		return this.unitPrice;
 	}
@@ -127,8 +122,8 @@ public class Product extends Reviewed implements Serializable {
 		return this.rate;
 	}
 
-	public String getVideo() {
-		return this.video;
+	public String getVideoUrl() {
+		return this.videoUrl;
 	}
 
 	public double getWeight() {
@@ -160,10 +155,6 @@ public class Product extends Reviewed implements Serializable {
 		this.country = value;
 	}
 
-	public void setPicture(ArrayList value) {
-		this.picture = value;
-	}
-
 	public void setUnitPrice(double value) {
 		this.unitPrice = value;
 	}
@@ -180,8 +171,8 @@ public class Product extends Reviewed implements Serializable {
 		this.rate = value;
 	}
 
-	public void setVideo(String videoUrl) {
-		this.video = videoUrl;
+	public void setVideoUrl(String videoUrl) {
+		this.videoUrl = videoUrl;
 	}
 
 	public void setWeight(double value) {
