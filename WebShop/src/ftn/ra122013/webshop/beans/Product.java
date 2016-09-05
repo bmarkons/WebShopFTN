@@ -180,21 +180,8 @@ public class Product extends Reviewed implements Serializable {
 		this.rate = value;
 	}
 
-	public void setVideo(InputStream videoStream, ServletContext ctx) {
-		File videoFile = new File(getPath(ctx),"video" + ".video");
-		try {
-			FileOutputStream out = new FileOutputStream(videoFile, false);
-			int read = 0;
-			byte[] bytes = new byte[1024];
-			while ((read = videoStream.read(bytes)) != -1) {
-				out.write(bytes, 0, read);
-			}
-			out.flush();
-			out.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	public void setVideo(String videoUrl) {
+		this.video = videoUrl;
 	}
 
 	public void setWeight(double value) {

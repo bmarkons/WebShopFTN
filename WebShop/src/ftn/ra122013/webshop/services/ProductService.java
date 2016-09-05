@@ -128,19 +128,16 @@ public class ProductService {
 	}
 
 	@POST
-	@Path("/upload")
+	@Path("/uploadImages")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Produces(MediaType.APPLICATION_JSON)
-	public String uploadFile(FormDataMultiPart multiPart) {
+	public String uploadImages(FormDataMultiPart multiPart) {
+		// TODO: verify authorization
+
 		// product code
 		FormDataBodyPart codeField = multiPart.getField("code");
 		String productCode = codeField.getValue();
-		// video file
-		FormDataBodyPart videoField = multiPart.getField("videofile");
-		InputStream videoStream = null;
-		if (videoField != null) {
-			videoStream = videoField.getValueAs(InputStream.class);
-		}
+
 		// image files
 		List<FormDataBodyPart> fields = multiPart.getFields("imagefiles");
 		ArrayList<InputStream> imageStreams = new ArrayList<InputStream>();
@@ -149,9 +146,33 @@ public class ProductService {
 			imageStreams.add(is);
 		}
 
-		// save files
-		saveFiles(videoStream, imageStreams, productCode);
+		// save image files
+		saveFiles(imageStreams, productCode);
 
+		return JSONParser.getSimpleResponse("OK");
+	}
+
+	@POST
+	@Path("/setVideoUrl")
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	@Produces(MediaType.APPLICATION_JSON)
+	public String uploadFile(FormDataMultiPart multiPart) {
+		// TODO: verify authorization
+		// product code
+		FormDataBodyPart codeField = multiPart.getField("code");
+		String productCode = codeField.getValue();
+
+		// video file
+		FormDataBodyPart videoField = multiPart.getField("videoUrl");
+		String videoUrl = null;
+		if (videoField != null) {
+			videoUrl = videoField.getValue();
+		}
+
+		// set video url
+		Product product = DAO.getProduct(productCode);
+		product.setVideo(videoUrl);
+		
 		return JSONParser.getSimpleResponse("OK");
 	}
 
@@ -167,21 +188,19 @@ public class ProductService {
 
 		HashMap<String, String> imgMap = new HashMap<String, String>();
 
-		System.out.println(ctx.getRealPath("/media/" + code));
 		File folder = new File(ctx.getRealPath("/media/" + code));
 		File[] mediaFiles = folder.listFiles();
-		String vid = null;
+		if (mediaFiles == null) {
+			return "";
+		}
 		for (File media : mediaFiles) {
 			if (media.getName().contains(".image")) {
 				try {
 					String imgBase64 = Base64.encodeBase64String(Files.readAllBytes(media.toPath()));
 					imgMap.put(media.getName(), imgBase64);
-					// imgs.add(imgBase64);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-			} else if (media.getName().contains(".video")) {
-				// TODO
 			}
 		}
 		ArrayList<Image> imgs = new ArrayList<Image>();
@@ -194,8 +213,6 @@ public class ProductService {
 		final ArrayList<Image> slike = imgs;
 		Object retVal = new Object() {
 			public ArrayList<Image> images = slike;
-			// Fix
-			public String video = null;
 		};
 
 		return JSONParser.toJSON(retVal);
@@ -204,7 +221,7 @@ public class ProductService {
 	@DELETE
 	@Path("/removeimg/{code}/{name}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String removeImage(@PathParam("code") String code,@PathParam("name") String name){
+	public String removeImage(@PathParam("code") String code, @PathParam("name") String name) {
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("user");
 		Product product = DAO.getProduct(code);
@@ -212,27 +229,23 @@ public class ProductService {
 		if (!(user instanceof Administrator) && !DAO.isAuthorizedSeller(user, storeCode)) {
 			return JSONParser.getSimpleResponse("ERROR");
 		}
-		
-		if(product.removeImage(name, ctx)){
+
+		if (product.removeImage(name, ctx)) {
 			return JSONParser.getSimpleResponse("Image '" + name + "' removed.");
-		}else{
+		} else {
 			return JSONParser.getSimpleResponse("not removed");
 		}
 	}
 
-	private void saveFiles(InputStream videoStream, ArrayList<InputStream> imageStreams, String productCode) {
-		if (videoStream == null && imageStreams.isEmpty()) {
-			return;
-		}
+	private void saveFiles(ArrayList<InputStream> imageStreams, String productCode) {
 		Product product = DAO.getProduct(productCode);
-		if (product == null) {
+		if (imageStreams.isEmpty() || product == null) {
 			return;
 		}
-		if (videoStream != null) {
-			product.setVideo(videoStream, ctx);
-		}
+
 		for (InputStream is : imageStreams) {
 			product.addImage(is, ctx);
 		}
 	}
+
 }
