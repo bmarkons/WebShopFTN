@@ -102,7 +102,7 @@ public class Product extends Reviewed implements Serializable {
 		return this.name;
 	}
 
-	public String getOriginCountry() {
+	public String getCountry() {
 		return this.country;
 	}
 

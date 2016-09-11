@@ -59,6 +59,7 @@ productEditController = function($scope, $mdDialog, $http, $rootScope, Country, 
 	$scope.activate = function(){
 		$scope.product = angular.fromJson(angular.toJson(Product.getEditingProduct()));
 		Category.getAll($scope);
+		Country.getAll($scope);
 	}
 
 	$scope.hide = function() {
