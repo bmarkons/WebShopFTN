@@ -37,8 +37,7 @@ public class HomeServlet extends HttpServlet {
 			response.sendRedirect("index.html");
 			return;
 		}
-		User user = (User) session.getAttribute("user");
-		response.sendRedirect("admin.html");
+		response.sendRedirect("webShop.jsp");
 
 	}
 

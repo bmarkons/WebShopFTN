@@ -459,11 +459,14 @@ public class WebShopDAO {
 					if (product.getCode().equals(productCode)) {
 						product.setName(updatedProduct.getName());
 						product.setDimension(updatedProduct.getDimension());
-						product.setCountry(updatedProduct.getOriginCountry());
+						product.setCountry(updatedProduct.getCountry());
+						product.setWeight(updatedProduct.getWeight());
 						product.setProducer(updatedProduct.getProducer());
 						product.setUnitPrice(updatedProduct.getUnitPrice());
 						product.setCategoryName(updatedProduct.getCategoryName());
 						product.setQuantity(updatedProduct.getQuantity());
+						product.setColor(updatedProduct.getColor());
+						product.setVideoUrl(updatedProduct.getVideoUrl());
 
 						save(storesFile, stores);
 						return true;

@@ -1,0 +1,55 @@
+<div flex="50">
+	<md-content>
+      <md-list flex>
+        <md-subheader class="md-no-sticky">Store list</md-subheader>
+        <h2 ng-if="stores == undefined || stores.length == 0">There is no stores</h2>
+        <md-list-item class="md-2-line" ng-repeat="store in stores" ng-click="showDialog($event,'edit',store)">
+          
+          <div class="md-list-item-text" layout="column" layout-align="stretch">
+	          <div  layout="row" layout-align="center center">
+	            <h2>{{ store.name }}</h2>
+	            <md-button ng-if="isAdmin()" class="md-icon-button" ng-click="remove(store.code)">
+	        		<md-icon>delete_forever</md-icon>
+	        		<md-tooltip>
+	        			Remove store
+	        		</md-tooltip>
+	            </md-button>
+	            <span flex></span>
+	            <md-button>
+	           	<jk-rating-stars max-rating="5" rating="rating" read-only="!isBuyer()" on-rating="onRating()" >
+				</jk-rating-stars>
+				</md-button>
+	          </div>
+	          <div layout>
+	          	<table flex>
+	            	<tr>
+		            	<td ng-show="store.address != null"><md-icon>store</md-icon></td>
+		            	<td ng-show="store.address != null"> {{ store.address }}&nbsp;|</td>
+		            	<td ng-show="store.country != null"><md-icon>business</md-icon></td>
+		            	<td ng-show="store.country != null">{{store.country}}&nbsp;|</td>
+		            	<td ng-show="store.telephone != null"><md-icon>phone</md-icon></td>
+		            	<td ng-show="store.telephone != null">{{store.telephone}}&nbsp;|</td>
+		            	<td ng-show="store.email != null"><md-icon>email</md-icon></td>
+		            	<td ng-show="store.email != null">{{store.email}}&nbsp;|</td>
+		            	<td ng-show="store.seller != null"><md-icon>perm_identity</md-icon></td>
+		            	<td ng-show="store.seller != null">{{store.seller}}</td>
+	            	</tr>
+            	</table>
+            	<div flex>
+            	</div>
+	          </div>
+            
+          </div>
+          <md-divider></md-divider>
+        </md-list-item>
+      </md-list>
+     </md-content>
+</div>
+<div flex="10" layout="column">
+ <md-button ng-if="isAdmin()" ng-click="showDialog($event,'new')" class="md-fab" aria-label="Eat cake">
+    <md-icon>add</md-icon>
+    <md-tooltip>
+       Add new store
+    </md-tooltip>
+  </md-button>
+</div>

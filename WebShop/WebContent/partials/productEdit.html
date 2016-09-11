@@ -1,0 +1,80 @@
+<md-dialog aria-label="Add new category" ng-cloak>
+  <form>
+    <md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2>Product --neki-- info</h2>
+        <span flex></span>
+        <md-button class="md-icon-button" ng-click="cancel()">
+          <md-icon md-svg-src="img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+        </md-button>
+      </div>
+    </md-toolbar>
+    <md-dialog-content>
+      <div class="md-dialog-content" style="background-color:{{product.color}};" back>
+        <form name="editForm">
+          <md-content layout-padding style="float:left;">
+            <md-input-container class="md-block" flex-gt-sm>
+              <label>Name</label>
+              <input ng-model="product.name" required>
+              </md-input-container>
+              <md-input-container class="md-block" flex-gt-sm>
+                <div md-color-picker ng-model="product.color"
+                  label="Choose a color"
+                  default="#f00"
+                  md-color-generic-palette="false"
+                  md-color-history="false"
+                  rgb="false"
+                  hsl="true"
+                  ></div>
+                </md-input-container>
+                <md-input-container class="md-block" flex-gt-sm>
+                  <label>Size (m<sup>2</sup>)</label>
+                  <input type="number" ng-model="product.dimension"/>
+                </md-input-container>
+                <md-input-container class="md-block" flex-gt-sm>
+                  <label>Weight (kg)</label>
+                  <input type="number" ng-model="product.weight"/>
+                </md-input-container>
+                <md-input-container>
+                  <label>Origin country</label>
+                  <md-select ng-model="product.country">
+                    <md-option ng-value="country" ng-repeat="country in countries">{{country}}</md-option>
+                  </md-select> 
+                </md-input-container>
+                <md-input-container class="md-block" flex-gt-sm>
+                  <label>Producer</label>
+                  <input type="text" ng-model="product.producer"/>
+                </md-input-container>
+                <md-input-container class="md-block" flex-gt-sm>
+                  <label>Unit price (&euro;)</label>
+                  <input type="number" ng-model="product.unitPrice"/>
+                </md-input-container>
+                <md-input-container class="md-block" flex-gt-sm>
+                  <label>Category</label>
+                  <md-select ng-model="product.categoryName">
+                    <md-option ng-repeat="category in categories" value="{{category.name}}">
+                      {{category.name}}
+                    </md-option>
+                  </md-select>
+                </md-input-container>
+                <md-input-container class="md-block" flex-gt-sm>
+                  <label>Quantity</label>
+                  <input type="number" ng-model="product.quantity"/>
+                </md-input-container>
+              </md-content>
+              <md-content layout-padding>
+              </md-content>
+            </form>
+          </div>
+        </md-dialog-content>
+        <md-dialog-actions layout="row">
+          <span flex></span>
+          <md-button ng-click="cancel()">
+            Cancel
+          </md-button>
+          <md-button ng-disabled="editForm.$invalid" class="md-raised md-primary" ng-click="saveChanges()">
+            Save changes
+          </md-button>
+        </md-dialog-actions>
+      </form>
+    </md-dialog>
