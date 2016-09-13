@@ -9,24 +9,24 @@
     <welcome-file>default.htm</welcome-file>
     <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
-<!--   <servlet> -->
-<!-- 		<description> -->
-<!-- 		</description> -->
-<!-- 		<display-name> -->
-<!-- 		LoginServlet</display-name> -->
-<!-- 		<servlet-name>LoginServlet</servlet-name> -->
-<!-- 		<servlet-class> -->
-<!-- 		ftn.ra122013.webshop.servlets.LoginServlet</servlet-class> -->
-<!-- 	</servlet> -->
-<!-- 	<servlet> -->
-<!-- 		<description> -->
-<!-- 		</description> -->
-<!-- 		<display-name> -->
-<!-- 		HomeServlet</display-name> -->
-<!-- 		<servlet-name>HomeServlet</servlet-name> -->
-<!-- 		<servlet-class> -->
-<!-- 		ftn.ra122013.webshop.servlets.HomeServlet</servlet-class> -->
-<!-- 	</servlet> -->
+  <servlet>
+		<description>
+		</description>
+		<display-name>
+		LoginServlet</display-name>
+		<servlet-name>LoginServlet</servlet-name>
+		<servlet-class>
+		ftn.ra122013.webshop.servlets.LoginServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>
+		HomeServlet</display-name>
+		<servlet-name>HomeServlet</servlet-name>
+		<servlet-class>
+		ftn.ra122013.webshop.servlets.HomeServlet</servlet-class>
+	</servlet>
   <servlet>
     <servlet-name>Jersey REST Service</servlet-name>
     <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>

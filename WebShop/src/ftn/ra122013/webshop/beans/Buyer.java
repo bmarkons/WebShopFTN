@@ -14,18 +14,10 @@ public class Buyer extends User {
 	private static final long serialVersionUID = -7363816313248923679L;
 
 	//private ArrayList<Purchase> purchases;
-	private HashMap<Store, Review> storeReviews;
-	private HashMap<Product, Review> productReviews;
+
 	private ArrayList<Product> wishList;
 
 	/* CUSTOM METHODS */
-	public void addProductReview(Review review, Product product) {
-		this.productReviews.put(product, review);
-	}
-
-	public void addStoreReview(Review review, Store store) {
-		this.storeReviews.put(store, review);
-	}
 
 //	public void addPurchase(Purchase purchase) {
 //		purchases.add(purchase);
@@ -44,13 +36,6 @@ public class Buyer extends User {
 //		return this.purchases;
 //	}
 
-	public HashMap<Store, Review> getStoreReviews() {
-		return this.storeReviews;
-	}
-
-	public HashMap<Product, Review> getProductReviews() {
-		return this.productReviews;
-	}
 
 	public ArrayList<Product> getWishList() {
 		return this.wishList;

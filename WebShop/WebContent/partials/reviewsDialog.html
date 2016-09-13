@@ -1,0 +1,69 @@
+<md-dialog aria-label="" ng-cloak>
+	<form>
+		<md-toolbar>
+			<div class="md-toolbar-tools">
+				<h2>Reviews</h2>
+				<md-button class="md-icon-button" ng-click="inputVisibility = true">
+					<md-icon>rate_review</md-icon>
+					<md-tooltip>Add review</md-tooltip>
+				</md-button>
+				<span flex></span>
+				<md-button class="md-icon-button" ng-click="cancel()">
+					<md-icon md-svg-src="img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+				</md-button>
+			</div>
+		</md-toolbar>
+		<div ng-show="inputVisibility" layout="column">
+			<md-input-container class="md-block">
+				<label>Add your comment</label>
+				<textarea ng-model="comment" md-maxlength="150" rows="5" md-select-on-focus></textarea>
+			</md-input-container>
+			<md-input-container style="background-color: white">
+				<div layout="row">
+					<md-button class="md-raised md-primary" ng-click="addReview()">Confirm</md-button>
+					<md-button class="md-raised" ng-click="inputVisibility = false; comment = '';">Cancel</md-button>
+					<span flex></span>
+				</div>
+			</md-input-container>
+			<md-divider></md-divider>
+		</div>
+		<md-dialog-content>
+			<div class="md-dialog-content" back>
+				<md-list flex>
+					<h4 ng-if="!reviewed.reviews.length">No reviews for {{reviewed.name}}</h2>
+					<md-list-item class="md-2-line" ng-repeat="review in reviewed.reviews">
+						<div class="md-list-item-text" layout="column" layout-align="stretch">
+							<div layout="row" layout-align="center center">
+								<h3>{{ review.buyer.username }}</h2>
+								<span>&nbsp;&nbsp;{{review.date | date:'short'}}</span>
+								<span flex></span>
+								<md-button ng-show="true" ng-click="deleteReview(review)">
+									<md-icon>delete_forever</md-icon>
+									<md-tooltip>Remove review</md-tooltip>
+								</md-button>
+								<md-button ng-show="true" ng-click="review.editing = true; review.editedComment = review.comment">
+									<md-icon>border_color</md-icon>
+									<md-tooltip>Edit review</md-tooltip>
+								</md-button>
+								<md-button>
+									<jk-rating-stars max-rating="5" rating="rating" >
+									</jk-rating-stars>
+								</md-button>
+							</div>
+							<p ng-hide="review.editing">{{review.comment}}</p>
+							<div ng-show="review.editing">
+								<md-input-container class="md-block">
+									<label>Edit your comment</label>
+									<textarea ng-model="review.editedComment" md-maxlength="150" rows="5" md-select-on-focus></textarea>
+								</md-input-container>
+								<md-button ng-click="editReview(review)">Edit</md-button>
+								<md-button ng-click="review.editing = false;">Cancel</md-button>
+							</div>
+							<md-divider></md-divider>
+						</md-list-item>
+					</md-list>
+				</div>
+			</md-dialog-content>
+
+		</form>
+	</md-dialog>

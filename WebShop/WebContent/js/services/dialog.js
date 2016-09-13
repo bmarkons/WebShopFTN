@@ -1,6 +1,6 @@
 webShopApp.service('Dialog', function($mdMedia, $mdDialog, $rootScope){
 
-	var showDialog = function(ev, controller, templateUrl){
+	var showDialog = function(ev, controller, templateUrl, locals){
 		var customFullscreen;
 		$rootScope.$watch(function() {
 			return $mdMedia('xs') || $mdMedia('sm');
@@ -13,6 +13,7 @@ webShopApp.service('Dialog', function($mdMedia, $mdDialog, $rootScope){
 			templateUrl : templateUrl,
 			parent : angular.element(document.body),
 			targetEvent : ev,
+			locals: locals,
 			clickOutsideToClose : true,
 			fullscreen : ($mdMedia('sm') || $mdMedia('xs')) && customFullscreen
 		});
@@ -28,5 +29,13 @@ webShopApp.service('Dialog', function($mdMedia, $mdDialog, $rootScope){
 
 	this.showAddImage = function (ev){
 		return showDialog(ev, productImageController, '/WebShop/partials/productImage.html');
+	}
+
+	this.showStoreReviews = function (ev, reviewed){
+		return showDialog(ev, reviewsDialogController, '/WebShop/partials/reviewsDialog.html', { reviewed: reviewed, target: 'store'});
+	}
+
+	this.showProductReviews = function (ev, reviewed){
+		return showDialog(ev, reviewsDialogController, '/WebShop/partials/reviewsDialog.html', { reviewed: reviewed, target: 'product'});
 	}
 });

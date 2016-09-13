@@ -15,13 +15,6 @@ public abstract class Review implements Serializable {
 	private Date date;
 	private double rate;
 
-	public Review(Buyer buyer, String code, String comment, Date date) {
-		this.buyer = buyer;
-		this.code = code;
-		this.comment = comment;
-		this.date = date;
-	}
-
 	public abstract Reviewed getReviewed();
 	
 	/* GETTERS */
@@ -59,4 +52,11 @@ public abstract class Review implements Serializable {
 		this.rate = value;
 	}
 
+	public void setCode(String code){
+		this.code = code;
+	}
+	
+	public void setBuyer(Buyer buyer){
+		this.buyer = buyer;
+	}
 }

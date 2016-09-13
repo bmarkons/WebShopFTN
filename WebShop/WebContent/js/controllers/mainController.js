@@ -3,15 +3,12 @@ webShopApp.controller('MainController', function ($scope, $timeout, $mdSidenav, 
 		$mdSidenav('left').toggle();
 	};
 	$scope.isAdmin = function(){
-		//return Auth.isAdmin();
-		return true;
+		return Auth.isAdmin();
 	};
 	$scope.isBuyer = function(){
-		//return Auth.isBuyer();
-		return true;
+		return Auth.isBuyer();
 	};
 	$scope.isSeller = function(){
-		//return Auth.isSeller();
-		return true;
+		return Auth.isSeller();
 	};
 });
