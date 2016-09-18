@@ -54,4 +54,16 @@ webShopApp.service('Review', function($http, $mdToast){
 				);
 		});
 	}
+
+	Review.rate = function(review, rate){
+		$http.post("/WebShop/rest/review/rate/" + review.code + "/" + rate, {}).success(function(response){
+			if(response.msg == "OK"){
+				$mdToast.show(
+					$mdToast.simple()
+					.textContent('Thanks for rating!')
+					.hideDelay(3000)
+					);
+			}
+		});
+	}
 });

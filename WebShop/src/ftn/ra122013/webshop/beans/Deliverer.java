@@ -12,9 +12,27 @@ public class Deliverer implements Serializable {
 	private ArrayList<String> countries;
 	private String description;
 	private String name;
-	private ArrayList<Tariff> tariffs;
+	private double weightRatio = -1;
+	private double dimensionRatio = -1;
+	private double minPrice = -1;
+
+	public double getMinPrice() {
+		return minPrice;
+	}
+
+	public void setMinPrice(double minPrice) {
+		this.minPrice = minPrice;
+	}
 
 	/* GETTERS */
+	public double getWeightRatio() {
+		return this.weightRatio;
+	}
+
+	public double getDimensionRatio() {
+		return this.dimensionRatio;
+	}
+
 	public String getCode() {
 		return this.code;
 	}
@@ -31,14 +49,15 @@ public class Deliverer implements Serializable {
 		return this.name;
 	}
 
-	// public Set<Purchase> getPurchase() {
-	// return this.purchase;
-	// }
-	public ArrayList<Tariff> getTariffs() {
-		return this.tariffs;
+	/* SETTERS */
+	public void setWeightRatio(double value) {
+		this.weightRatio = value;
 	}
 
-	/* SETTERS */
+	public void setDimensionRatio(double value) {
+		this.dimensionRatio = value;
+	}
+
 	public void setCode(String value) {
 		this.code = value;
 	}
@@ -51,20 +70,16 @@ public class Deliverer implements Serializable {
 		this.name = value;
 	}
 
-	public void setTariffs(ArrayList<Tariff> value) {
-		this.tariffs = value;
-	}
-
-	public void setCountries(ArrayList<String> countries){
+	public void setCountries(ArrayList<String> countries) {
 		this.countries = countries;
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		Deliverer del = (Deliverer) obj;
 		return del.getCode().equals(code);
 	}
-	
+
 	@Override
 	public String toString() {
 		return getName() + "," + getDescription() + "," + getCountries();

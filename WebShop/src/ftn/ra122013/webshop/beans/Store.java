@@ -2,13 +2,14 @@ package ftn.ra122013.webshop.beans;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.codehaus.jackson.annotate.JsonManagedReference;
 
 @XmlRootElement
-public class Store extends Reviewed{
+public class Store extends Reviewed {
 
 	private static final long serialVersionUID = 638326813827023481L;
 	private String address;
@@ -16,13 +17,17 @@ public class Store extends Reviewed{
 	private String country;
 	private String email;
 	private String name;
-	private double rate;
 	private String seller;
 	private String telephone;
 	private ArrayList<ActionSale> actionSales;
 	private ArrayList<Product> products = new ArrayList<Product>();
+	private HashMap<String, Integer> rates = new HashMap<String, Integer>();
 
 	/* CUSTOM METHODS */
+	public void rate(int rate, Buyer buyer) {
+		rates.put(buyer.getUsername(), rate);
+	}
+
 	public void addProduct(Product product) {
 		products.add(product);
 	}
@@ -70,7 +75,14 @@ public class Store extends Reviewed{
 	// }
 
 	public double getRate() {
-		return this.rate;
+		if (rates.isEmpty()) {
+			return 0;
+		}
+		int sum = 0;
+		for (int rate : rates.values()) {
+			sum += rate;
+		}
+		return sum / rates.size();
 	}
 
 	public String getSeller() {
@@ -108,10 +120,6 @@ public class Store extends Reviewed{
 
 	public void setName(String value) {
 		this.name = value;
-	}
-
-	public void setRate(double value) {
-		this.rate = value;
 	}
 
 	public void setSeller(String sellerUsername) {

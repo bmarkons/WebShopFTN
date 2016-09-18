@@ -1,87 +1,21 @@
 <div>
 	<h2>
 		Deliverers list
-		</h3>
-		<a href="/WebShop/admin.html#/addDeliverer">Add deliverer</a> Search:
-		<input type="text" ng-model="delSearch" /><br>
+	</h3>
+	<a href="/WebShop/webShop.jsp#/addDeliverer">Add deliverer</a> Search:
+	<input type="text" ng-model="delSearch" /><br>
 
-		<div ng-repeat="deliverer in deliverers | filter: delSearch">
-			<hr>
-			<div ng-hide="deliverer.editing">
-				<h3>{{deliverer.name}}</h3>
-				Code: {{deliverer.code}} <br> Description:<br><br>
-				<p>{{deliverer.description}}</p>
-				Tariffs:<br>
-				<table border="1">
-					<tr>
-						<th>Dimensions</th><th>Weight</th><th>Price</th>
-					</tr>
-					<tr ng-repeat="tariff in deliverer.tariffs">
-						<td>{{tariff.minDimension}} - {{tariff.maxDimension}} [m2]</td>
-						<td>{{tariff.minWeight}} - {{tariff.maxWeight}} [kg]</td>
-						<td>{{tariff.price}}</td>
-					</tr>
-				</table>
-				<br> Countries: {{deliverer.countries}} <br>
-				<button ng-click="deliverer.editing = true; deliverer.changed = {code: deliverer.code,name:deliverer.name,description:deliverer.description,countries: deliverer.countries,tariffs: deliverer.tariffs}">
-					Edit
-				</button>
-				<md-button class="md-warn" ng-click="removeDeliverer(deliverer.code)">Remove</md-button>
-			</div>
-			<div ng-show="deliverer.editing">
-				<table>
-					<tr>
-						<td>Name:</td>
-						<td><input type="text" name="name" ng-model="deliverer.changed.name"/></td>
-					</tr>
-					<tr>
-						<td>Description:</td>
-						<td><textarea rows="4" cols="40" name="description"
-								ng-model="deliverer.changed.description"></textarea></td>
-					</tr>
-					<tr>
-<!-- 						<td>Select countries:</td> -->
-<!-- 						<td><select multiple title="Select countries" id="countries" -->
-<!-- 							ng-model="deliverer.changed.countries" size="10"> -->
-<!-- 								<option ng-repeat="country in countries" value="{{country}}">{{country}}</option> -->
-<!-- 						</select></td> -->
-						<td>
-							<md-input-container> 
-								<label>Country</label>
-								<md-select ng-model="deliverer.changed.countries" multiple> 
-									<md-option ng-value="country" ng-repeat="country in countries">{{country}}</md-option>
-								</md-select> 
-							</md-input-container>
-						</td>
-					</tr>
-					<tr><td><button ng-click="newTariff(deliverer)">New tariff</button></td></tr>
-					<tr ng-repeat="tariff in deliverer.changed.tariffs">
-						<td>
-							<input type="text" ng-model="tariff.minDimension" placeholder="min dim"/>
-						</td>
-						<td>
-							<input type="text" ng-model="tariff.maxDimension" placeholder="max dim"/>
-						</td>
-						<td>
-							<input type="text" ng-model="tariff.minWeight" placeholder="min weight"/>
-						</td>
-						<td>
-							<input type="text" ng-model="tariff.maxWeight" placeholder="max weight"/>
-						</td>
-						<td>
-							<input type="text" ng-model="tariff.price" placeholder="price"/>
-						</td>
-						<td>
-							<md-button class="md-warn" ng-click="removeTariff(tariff, deliverer)">Remove</md-button>
-						</td>
-					</tr>
-				</table>
-				
-				<br>
-
-				<button ng-click="saveChanges(deliverer)">Save changes</button>
-				<button ng-click="deliverer.editing = false"
-					value="Quit">Cancel</button>
-			</div>
+	<div ng-repeat="deliverer in deliverers | filter: delSearch">
+		<hr>
+		<div>
+			<h3>{{deliverer.name}}</h3>
+			Description:<br><br>
+			<p>{{deliverer.description}}</p>
+			<br> Countries: {{deliverer.countries}} <br>
+			<button ng-click="editDeliverer(deliverer)">
+				Edit
+			</button>
+			<md-button class="md-warn" ng-click="removeDeliverer(deliverer.code)">Remove</md-button>
 		</div>
+	</div>
 </div>

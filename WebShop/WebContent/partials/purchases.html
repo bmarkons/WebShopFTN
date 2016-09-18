@@ -1,0 +1,27 @@
+<div>
+	<md-content>
+		<md-list flex>
+			<md-subheader ng-if="user.type == 'buyer'" class="md-no-sticky">My purchases</md-subheader>
+			<md-subheader ng-if="user.type == 'admin'" class="md-no-sticky">Purchases</md-subheader>
+			<md-subheader ng-if="user.type == 'seller'" class="md-no-sticky">My stores purchases</md-subheader>
+			<h2 ng-if="!purchases.length">No purchases yet...</h2>
+			<md-list-item class="md-3-line" ng-repeat="purchase in purchases">
+				<div class="md-list-item-text" layout="column">
+					<div layout="row">
+						<h2>{{purchase.store.name}}</h2>
+						<span flex></span>
+						<md-icon>attach_money</md-icon>
+						<h2>{{purchase.totalPrice}}</h2>
+					</div>
+					<span>Deliverer: {{purchase.deliverer.name}}</span>
+					<h3>Products purchased:</h3>
+					<ul>
+						<li ng-repeat="product in purchase.products">
+							{{product.name}}
+						</li>
+					</ul>
+				</div>
+			</md-list-item>
+		</md-list>
+	</md-content>
+</div>

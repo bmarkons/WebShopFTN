@@ -22,7 +22,7 @@
 							<md-tooltip>Show reviews</md-tooltip>
 						</md-button>
 						<md-button>
-							<jk-rating-stars max-rating="5" rating="rating" read-only="!isBuyer()" on-rating="onRating()" >
+							<jk-rating-stars rating="store.rate" read-only="!isBuyer()" on-rating="rateStore(rating, store)" >
 							</jk-rating-stars>
 						</md-button>
 					</div>

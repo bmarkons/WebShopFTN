@@ -27,6 +27,10 @@ webShopApp.config(['$routeProvider', function($routeProvider) {
 			}
 		}
 	})
+	.when('/editDeliverer', {
+		templateUrl: '/WebShop/partials/addDeliverer.html',
+		controller: 'DelivererEditController'
+	})
 	.when('/categories', {
 		templateUrl: '/WebShop/partials/categories.html',
 		controller: 'CategoriesController',
@@ -54,18 +58,29 @@ webShopApp.config(['$routeProvider', function($routeProvider) {
 			}
 		}
 	})
+	.when('/shoppingCart', {
+		templateUrl: '/WebShop/partials/shoppingCart.html',
+		controller: 'ShoppingCartController'
+	})
+	.when('/purchases', {
+		templateUrl: '/WebShop/partials/purchases.html',
+		controller: 'PurchasesController'
+	})
 	.otherwise({
 		redirectTo: '/'
 	});
 }]);
 
-webShopApp.run(['$rootScope', '$location', 'Auth', function ($rootScope, $location, Auth) {
+webShopApp.run(['$rootScope', '$location', 'Auth', 'ShoppingCart', function ($rootScope, $location, Auth, ShoppingCart) {
 	$rootScope.$on('$routeChangeStart', function (event, next, current) {
 		Auth.getUser().success( function(response) {
 			if(response == null){
 				location.href = '/WebShop/HomeServlet';
 			}else{
 				$rootScope.user = response;
+				if($rootScope.user.type == 'buyer'){
+					window.onbeforeunload = ShoppingCart.check
+				}
 			}
 		});
 	});

@@ -1,4 +1,4 @@
-webShopApp.service('Store', function($http, Auth){
+webShopApp.service('Store', function($http, Auth, $mdToast){
 	this.getAll = function($scope){
 		$http.get("/WebShop/rest/store/getAll").success(function(response) {
 			$scope.stores = response;
@@ -16,6 +16,18 @@ webShopApp.service('Store', function($http, Auth){
 				});
 			}else{
 				$scope.stores = response;
+			}
+		});
+	}
+
+	this.rate = function(store, rate){
+		$http.post("/WebShop/rest/store/rate/" + store.code + "/" + rate, {}).success(function(response){
+			if(response.msg == "OK"){
+				$mdToast.show(
+					$mdToast.simple()
+					.textContent('Thanks for rating!')
+					.hideDelay(3000)
+					);
 			}
 		});
 	}

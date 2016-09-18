@@ -161,8 +161,8 @@ public class WebShopDAO {
 		save(usersFile, users);
 	}
 
-	public synchronized void updateUser(String username, String password, String address, String country, String email, String name,
-			String surname, String telephone) {
+	public synchronized void updateUser(String username, String password, String address, String country, String email,
+			String name, String surname, String telephone) {
 		ArrayList<User> users = (ArrayList<User>) load(usersFile);
 		for (User user : users) {
 			if (user.getUsername().equals(username)) {
@@ -282,6 +282,17 @@ public class WebShopDAO {
 	}
 
 	/*** STORES ***/
+	public synchronized void rateStore(String code, int rate, Buyer buyer) {
+		ArrayList<Store> stores = getAllStores();
+		for (Store store : stores) {
+			if(store.getCode().equals(code)){
+				store.rate(rate, buyer);
+				
+				save(storesFile, stores);
+			}
+		}
+	}
+
 	public synchronized String generateStoreCode() {
 		String uniqueID = null;
 		do {
@@ -379,13 +390,13 @@ public class WebShopDAO {
 			if (store.getCode().equals(storeCode)) {
 				store.addProduct(product);
 				product.setStore(storeCode);
-				
+
 				File folder = new File(context.getRealPath("/media") + "/" + product.getCode());
 				boolean success = folder.mkdirs();
-				if(!success){
+				if (!success) {
 					return false;
 				}
-				
+
 				save(storesFile, stores);
 				return true;
 			}
@@ -401,7 +412,7 @@ public class WebShopDAO {
 					store.removeProduct(product);
 
 					deleteDirectory(new File(context.getRealPath("/media") + "/" + product.getCode()));
-					
+
 					save(storesFile, stores);
 					return true;
 				}
@@ -410,22 +421,22 @@ public class WebShopDAO {
 		return false;
 
 	}
+
 	// delete folder
 	public synchronized boolean deleteDirectory(File directory) {
-	    if(directory.exists()){
-	        File[] files = directory.listFiles();
-	        if(null!=files){
-	            for(int i=0; i<files.length; i++) {
-	                if(files[i].isDirectory()) {
-	                    deleteDirectory(files[i]);
-	                }
-	                else {
-	                    files[i].delete();
-	                }
-	            }
-	        }
-	    }
-	    return(directory.delete());
+		if (directory.exists()) {
+			File[] files = directory.listFiles();
+			if (null != files) {
+				for (int i = 0; i < files.length; i++) {
+					if (files[i].isDirectory()) {
+						deleteDirectory(files[i]);
+					} else {
+						files[i].delete();
+					}
+				}
+			}
+		}
+		return (directory.delete());
 	}
 
 	public synchronized Product getProduct(String productCode) {
@@ -477,6 +488,18 @@ public class WebShopDAO {
 		return false;
 	}
 
+	public synchronized void rateProduct(String productCode, int rate, Buyer buyer) {
+		ArrayList<Store> stores = (ArrayList<Store>) load(storesFile);
+		for (Store store : stores) {
+			for (Product product : store.getProducts()) {
+				if (product.getCode().equals(productCode)) {
+					product.rate(rate, buyer);
+				}
+			}
+		}
+		save(storesFile, stores);
+	}
+
 	/*** PURCHASES ***/
 	public synchronized String generatePurchaseCode() {
 		String uniqueID = null;
@@ -526,6 +549,28 @@ public class WebShopDAO {
 	}
 
 	/*** REVIEWS ***/
+	public synchronized void rateReview(String code, int rate, Buyer buyer) {
+		ArrayList<Store> stores = getAllStores();
+		for (Store store : stores) {
+			for (Review review : store.getReviews()) {
+				if (review.getCode().equals(code)) {
+					review.rate(rate, buyer);
+
+					save(storesFile, stores);
+				}
+			}
+			for (Product product : store.getProducts()) {
+				for (Review review : product.getReviews()) {
+					if (review.getCode().equals(code)) {
+						review.rate(rate, buyer);
+
+						save(storesFile, stores);
+					}
+				}
+			}
+		}
+	}
+
 	public synchronized String generateReviewCode() {
 		String uniqueID = null;
 		do {
@@ -664,6 +709,24 @@ public class WebShopDAO {
 		Store store = getStore(storeCode);
 		if (store.getSeller().equals(user.getUsername())) {
 			return true;
+		}
+		return false;
+	}
+
+	public boolean reduceQuantity(Product product) {
+		ArrayList<Store> stores = (ArrayList<Store>) load(storesFile);
+		for(Store store : stores){
+			for(Product p : store.getProducts()){
+				if(p.getCode().equals(product.getCode())){
+					if(p.getQuantity() < 1){
+						return false;
+					}else{
+						p.reduceQuantity();
+						save(storesFile, stores);
+						return true;
+					}
+				}
+			}
 		}
 		return false;
 	}

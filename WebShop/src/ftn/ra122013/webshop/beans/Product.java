@@ -7,16 +7,19 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Set;
 
 import javax.servlet.ServletContext;
 
 import org.codehaus.jackson.annotate.JsonBackReference;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 import ftn.ra122013.webshop.dao.WebShopDAO;
 
 import java.util.HashSet;
 
+@JsonIgnoreProperties(ignoreUnknown=true)
 public class Product extends Reviewed implements Serializable {
 
 	/**
@@ -32,27 +35,31 @@ public class Product extends Reviewed implements Serializable {
 	private double unitPrice;
 	private String producer;
 	private double quantity;
-	private double rate;
 	private String videoUrl;
 	private double weight;
 	private String store;
-	
-	private String getPath(ServletContext ctx){
+	private HashMap<String, Integer> rates = new HashMap<String, Integer>();
+
+	public void rate(int rate, Buyer buyer) {
+		rates.put(buyer.getUsername(), rate);
+	}
+
+	private String getPath(ServletContext ctx) {
 		return ctx.getRealPath("/media/" + code + "/");
 	}
 
-	public String generatePath(ServletContext ctx){
+	public String generatePath(ServletContext ctx) {
 		String path = "pic";
 		int n = 1;
-		while((new File(getPath(ctx),path + n + ".image")).exists()){
+		while ((new File(getPath(ctx), path + n + ".image")).exists()) {
 			n++;
 		}
 		return path + n;
 	}
-	
-	public void addImage(InputStream is, ServletContext ctx){
+
+	public void addImage(InputStream is, ServletContext ctx) {
 		String path = generatePath(ctx);
-		File imageFile = new File(getPath(ctx),path + ".image");
+		File imageFile = new File(getPath(ctx), path + ".image");
 		try {
 			FileOutputStream out = new FileOutputStream(imageFile, false);
 			int read = 0;
@@ -67,12 +74,12 @@ public class Product extends Reviewed implements Serializable {
 			e.printStackTrace();
 		}
 	}
-	
-	public boolean removeImage(String path, ServletContext context){
-		File imgFile = new File(getPath(context),path);
+
+	public boolean removeImage(String path, ServletContext context) {
+		File imgFile = new File(getPath(context), path);
 		return imgFile.delete();
 	}
-	
+
 	public String getStore() {
 		return store;
 	}
@@ -119,7 +126,13 @@ public class Product extends Reviewed implements Serializable {
 	}
 
 	public double getRate() {
-		return this.rate;
+		if (rates.size() == 0)
+			return 0;
+		int sum = 0;
+		for (int rate : rates.values()) {
+			sum += rate;
+		}
+		return sum / rates.size();
 	}
 
 	public String getVideoUrl() {
@@ -167,16 +180,16 @@ public class Product extends Reviewed implements Serializable {
 		this.quantity = value;
 	}
 
-	public void setRate(double value) {
-		this.rate = value;
-	}
-
 	public void setVideoUrl(String videoUrl) {
 		this.videoUrl = videoUrl;
 	}
 
 	public void setWeight(double value) {
 		this.weight = value;
+	}
+
+	public void reduceQuantity() {
+		this.quantity--;
 	}
 
 }

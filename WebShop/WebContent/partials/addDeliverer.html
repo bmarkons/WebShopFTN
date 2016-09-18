@@ -1,54 +1,39 @@
 <div>
-	<table>
-		<tr>
-			<td>Name:</td>
-			<td><input type="text" name="name" ng-model="name" required /></td>
-		</tr>
-		<tr>
-			<td>Description:</td>
-			<td><textarea rows="4" cols="50" name="description"
-				ng-model="description"></textarea></td>
-			</tr>
-			<tr>
-				<td>Select countries:</td>
-				<td>
-					<md-input-container>
-					<label>Country</label>
-					<md-select ng-model="selectedCountries" multiple>
-					<md-option ng-value="country" ng-repeat="country in countries">{{country}}</md-option>
-				</md-select> 
+	<form name="form">
+		<md-input-container>
+			<label>Deliverer name</label>
+			<input required ng-model="name"/>
+		</md-input-container>
+		<md-input-container class="md-block">
+			<label>Description:</label>
+			<textarea ng-model="description" md-maxlength="150" rows="5" md-select-on-focus></textarea>
+		</md-input-container>
+		<md-input-container>
+			<label>Select countries:</label>
+			<md-select ng-model="selectedCountries" multiple>
+				<md-option ng-value="country" ng-repeat="country in countries">{{country}}</md-option>
+			</md-select> 
+		</md-input-container>
+		<div layout="row">
+			<md-input-container>
+				<label>Weight ratio</label>
+				<input type="number" required ng-model="weightRatio"/>
 			</md-input-container>
-		</td>
-	</tr>
-</table>
-<button ng-hide="adding" ng-click="adding = true">New tariff</button>
-<div ng-show="adding">
-	<input type="text" placeholder="min dim" ng-model="newtariff.minDimension"/>
-	<input type="text" placeholder="max dim" ng-model="newtariff.maxDimension"/>
-	<input type="text" placeholder="min weight" ng-model="newtariff.minWeight"/>
-	<input type="text" placeholder="max weight" ng-model="newtariff.maxWeight"/>
-	<input type="text" placeholder="price" ng-model="newtariff.price"/>
-	<button ng-click="addTariff()">Add</button>
-	<button ng-click="adding = false">Cancel</button>
-</div>
-<table>
-	<th>Min dimension</th>
-	<th>Max dimension</th>
-	<th>Min weight</th>
-	<th>Max weight</th>
-	<th>Price</th>
-	<tr ng-repeat="tariff in tariffs">
-		<td>{{tariff.minDimension}}</td>
-		<td>{{tariff.maxDimension}}</td>
-		<td>{{tariff.minWeight}}</td>
-		<td>{{tariff.maxWeight}}</td>
-		<td>{{tariff.price}}</td>
-		<td><button ng-click="removeTariff(tariff)">Remove</button></td>
-	</tr>
-</table>
-<br>
-
-<button ng-click="addDeliverer()">Add deliverer</button>
-<button onclick="window.location.href='/WebShop/admin.html#/'"
-value="Quit">Cancel</button>
+			<md-input-container>
+				<label>Dimension ratio</label>
+				<input type="number" required ng-model="dimensionRatio"/>
+			</md-input-container>
+			<md-input-container>
+				<label>Minimum price</label>
+				<input type="number" required ng-model="minPrice"/>
+			</md-input-container>
+		</div>
+		<div layout-padding>
+			<h3 layout-padding="center center">{{weightRatio}} x WEIGHT + {{dimensionRatio}} x DIMENSION + {{minPrice}} = DELIVERY PRICE</h3>
+		</div>
+		<div layout="row">
+			<md-button ng-click="addDeliverer()" type="submit">Add</md-button>
+			<md-button ng-href="/WebShop/webShop.jsp#/">Cancel</md-button>
+		</div>
+	</form>
 </div>

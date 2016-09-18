@@ -32,6 +32,7 @@ import com.sun.jersey.multipart.FormDataBodyPart;
 import com.sun.jersey.multipart.FormDataMultiPart;
 
 import ftn.ra122013.webshop.beans.Administrator;
+import ftn.ra122013.webshop.beans.Buyer;
 import ftn.ra122013.webshop.beans.Product;
 import ftn.ra122013.webshop.beans.User;
 import ftn.ra122013.webshop.dao.WebShopDAO;
@@ -49,9 +50,15 @@ public class ProductService {
 	WebShopDAO DAO = WebShopDAO.getInstance();
 
 	@POST
-	@Path("/rate")
-	public void rateProduct() {
-
+	@Path("/rate/{productCode}/{rate}")
+	public String rateProduct(@PathParam("productCode") String productCode, @PathParam("rate") int rate) {
+		//check permission
+		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute("user");
+		
+		DAO.rateProduct(productCode, rate, (Buyer) user);
+		
+		return JSONParser.getSimpleResponse("OK");
 	}
 
 	@GET

@@ -38,4 +38,8 @@ webShopApp.service('Dialog', function($mdMedia, $mdDialog, $rootScope){
 	this.showProductReviews = function (ev, reviewed){
 		return showDialog(ev, reviewsDialogController, '/WebShop/partials/reviewsDialog.html', { reviewed: reviewed, target: 'product'});
 	}
+
+	this.showPurchase = function (ev){
+		return showDialog(ev, purchaseDialogController, '/WebShop/partials/purchaseDialog.html');
+	}
 });

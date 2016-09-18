@@ -19,6 +19,7 @@ import javax.ws.rs.core.MediaType;
 import org.apache.tomcat.util.codec.binary.StringUtils;
 
 import ftn.ra122013.webshop.beans.Administrator;
+import ftn.ra122013.webshop.beans.Buyer;
 import ftn.ra122013.webshop.beans.Seller;
 import ftn.ra122013.webshop.beans.Store;
 import ftn.ra122013.webshop.beans.User;
@@ -28,14 +29,24 @@ import ftn.ra122013.webshop.json.JSONParser;
 @Path("/store")
 public class StoreService {
 
-	
-
 	@Context
 	HttpServletRequest request;
 	@Context
 	ServletContext ctx;
-	
+
 	WebShopDAO DAO = WebShopDAO.getInstance();
+
+	@POST
+	@Path("/rate/{storeCode}/{rate}")
+	public String rateProduct(@PathParam("storeCode") String storeCode, @PathParam("rate") int rate) {
+		// check permission
+		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute("user");
+
+		DAO.rateStore(storeCode, rate, (Buyer) user);
+
+		return JSONParser.getSimpleResponse("OK");
+	}
 
 	@GET
 	@Path("/getAll")
@@ -61,10 +72,10 @@ public class StoreService {
 		if (store.getName() == null || store.getName().equals("")) {
 			return JSONParser.getSimpleResponse("ERROR");
 		}
-		if(DAO.addStore(store)){
+		if (DAO.addStore(store)) {
 			System.out.println("Store added");
 			return JSONParser.getSimpleResponse("OK");
-		}else{
+		} else {
 			return JSONParser.getSimpleResponse("ERROR");
 		}
 	}
@@ -106,7 +117,7 @@ public class StoreService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.TEXT_PLAIN)
 	public void rateStore() {
-		
+
 	}
 
 }

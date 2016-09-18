@@ -1,14 +1,10 @@
-webShopApp.controller('StoresController', function($scope,$http,$mdDialog,$mdMedia,$mdToast,$rootScope, Dialog) {
+webShopApp.controller('StoresController', function($scope,$http,$mdDialog,$mdMedia,$mdToast,$rootScope, Dialog, Store) {
 	$scope.activate = function(){
 		$scope.getAllStores();
 	}
 
 	$scope.showReviews = function(ev, store){
 		Dialog.showStoreReviews(ev, store);
-	}
-
-	$scope.onRating = function(){
-		alert("rated");
 	}
 
 	$scope.getAllStores = function(){
@@ -71,6 +67,12 @@ webShopApp.controller('StoresController', function($scope,$http,$mdDialog,$mdMed
 			  		        );
 			$scope.getAllStores();
 		});
+	};
+
+	$scope.rateStore = function(rating, store){
+		if(rating == 0)
+			return;
+		Store.rate(store, rating);
 	};
 	
 	$scope.activate();

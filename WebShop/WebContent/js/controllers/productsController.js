@@ -1,4 +1,4 @@
-webShopApp.controller('ProductsController', function($scope, $http, $mdDialog, $mdMedia, $mdToast, $rootScope, Dialog, Product, user) {
+webShopApp.controller('ProductsController', function($scope, $http, $mdDialog, $mdMedia, $mdToast, $rootScope, Dialog, Product, user, ShoppingCart) {
 	//Init;
 	Product.getAll($scope);
 	
@@ -38,6 +38,16 @@ webShopApp.controller('ProductsController', function($scope, $http, $mdDialog, $
 			Product.getAll($scope);
 		});
 	};
+
+	$scope.rateProduct = function (rating, product){
+		if(rating == 0)
+			return;
+		Product.rate(product, rating);
+	}
+
+	$scope.addToCart = function (product){
+		ShoppingCart.add(product);
+	}
 });
 
 productAddController = function($scope, $mdDialog, Country, Auth, Product, Category, Store) {

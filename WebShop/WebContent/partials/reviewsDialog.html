@@ -31,7 +31,7 @@
 			<div class="md-dialog-content" back>
 				<md-list flex>
 					<h4 ng-if="!reviewed.reviews.length">No reviews for {{reviewed.name}}</h2>
-					<md-list-item class="md-2-line" ng-repeat="review in reviewed.reviews">
+					<md-list-item class="md-2-line" ng-repeat="review in reviewed.reviews | orderBy: 'rate':true">
 						<div class="md-list-item-text" layout="column" layout-align="stretch">
 							<div layout="row" layout-align="center center">
 								<h3>{{ review.buyer.username }}</h2>
@@ -45,10 +45,8 @@
 									<md-icon>border_color</md-icon>
 									<md-tooltip>Edit review</md-tooltip>
 								</md-button>
-								<md-button>
-									<jk-rating-stars max-rating="5" rating="rating" >
-									</jk-rating-stars>
-								</md-button>
+								<jk-rating-stars rating="review.rate" read-only="false" on-rating="rateReview(rating, review)" >
+								</jk-rating-stars>
 							</div>
 							<p ng-hide="review.editing">{{review.comment}}</p>
 							<div ng-show="review.editing">

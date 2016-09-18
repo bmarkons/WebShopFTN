@@ -11,16 +11,10 @@ public class Purchase implements Serializable {
 	private Buyer buyer;
 	private String code;
 	private Deliverer deliverer;
-	private Set<Product> product;
+	private ArrayList<Product> products;
 	private Store store;
 	private double totalPrice;
 	private String complaint;
-
-	/* CUSTOM METHODS */
-	public void addProduct(Product product, double price, double quantity, double tax) {
-		// TODO implement this operation
-		throw new UnsupportedOperationException("not implemented");
-	}
 
 	/* GETTERS */
 	public Buyer getBuyer() {
@@ -35,8 +29,8 @@ public class Purchase implements Serializable {
 		return this.deliverer;
 	}
 
-	public Set<Product> getProduct() {
-		return this.product;
+	public ArrayList<Product> getProducts() {
+		return this.products;
 	}
 
 	public Store getStore() {
@@ -52,6 +46,10 @@ public class Purchase implements Serializable {
 	}
 
 	/* SETTERS */
+	public void setProducts(ArrayList<Product> products) {
+		this.products = products;
+	}
+
 	public void setBuyer(Buyer value) {
 		this.buyer = value;
 	}

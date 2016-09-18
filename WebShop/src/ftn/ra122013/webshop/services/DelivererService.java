@@ -30,13 +30,11 @@ import ftn.ra122013.webshop.json.JSONParser;
 @Path("/deliverer")
 public class DelivererService {
 
-	
-
 	@Context
 	HttpServletRequest request;
 	@Context
 	ServletContext ctx;
-	
+
 	WebShopDAO DAO = WebShopDAO.getInstance();
 
 	@GET
@@ -55,122 +53,47 @@ public class DelivererService {
 	@Path("/add")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public String addDeliverer(String delJson) {
+	public String addDeliverer(Deliverer deliverer) {
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("user");
 		if (!(user instanceof Administrator)) {
 			return JSONParser.getSimpleResponse("ERROR");
 		}
-		// if(deliverer == null){
-		// return JSONParser.getSimpleResponse("ERROR");
-		// }
-		// deliverer.setCode(DAO.generateDelivererCode());
-		// DAO.addDeliverer(deliverer);
-		// try {
-		// JSONObject obj = new JSONObject(deliverer);
-		// System.out.println(obj.getString("name"));
-		// } catch (JSONException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
-		System.out.println(delJson);
-		String name = null;
-		String description = null;
-		ArrayList<String> countries = null;
-		ArrayList<Tariff> tariffs = null;
-		try {
-			JSONObject json = new JSONObject(delJson);
-			name = json.getString("name");
-			description = json.getString("description");
-			countries = new ArrayList<String>();
-			JSONArray countriesJson = json.getJSONArray("countries");
-			for (int i = 0; i < countriesJson.length(); i++) {
-				countries.add(countriesJson.getString(i));
-			}
-			tariffs = new ArrayList<Tariff>();
-			JSONArray tariffsJson = json.getJSONArray("tariffs");
-			for (int i = 0; i < tariffsJson.length(); i++) {
-				JSONObject tariffJson = tariffsJson.getJSONObject(i);
-				double minDimension = tariffJson.getDouble("minDimension");
-				double maxDimension = tariffJson.getDouble("maxDimension");
-				double minWeight = tariffJson.getDouble("minWeight");
-				double maxWeight = tariffJson.getDouble("maxWeight");
-				double price = tariffJson.getDouble("price");
-				Tariff tariff = new Tariff(minDimension, maxDimension, minWeight, maxWeight, price);
-				tariffs.add(tariff);
-			}
-		} catch (JSONException e) {
-			e.printStackTrace();
+
+		if (deliverer.getName() == null || deliverer.getName().isEmpty()) {
+			return JSONParser.getSimpleResponse("ERROR");
+		}
+		if (deliverer.getDimensionRatio() == -1 || deliverer.getWeightRatio() == -1 || deliverer.getMinPrice() == -1) {
 			return JSONParser.getSimpleResponse("ERROR");
 		}
 
-		String code = DAO.generateDelivererCode();
-		Deliverer deliverer = new Deliverer();
-		deliverer.setName(name);
-		deliverer.setCode(code);
-		deliverer.setDescription(description);
-		deliverer.setCountries(countries);
-		deliverer.setTariffs(tariffs);
+		deliverer.setCode(DAO.generateDelivererCode());
 		DAO.addDeliverer(deliverer);
-		
+
 		return JSONParser.getSimpleResponse("OK");
 	}
 
 	@POST
-	@Path("/update")
+	@Path("/update/{delivererCode}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public String updateDeliverer(String delJson) {
+	public String updateDeliverer(Deliverer deliverer, @PathParam("delivererCode") String delivererCode) {
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("user");
 		if (!(user instanceof Administrator)) {
 			return JSONParser.getSimpleResponse("ERROR");
 		}
-		System.out.println(delJson);
-		String name = null;
-		String description = null;
-		ArrayList<String> countries = null;
-		ArrayList<Tariff> tariffs = null;
-		String code = null;
-		try {
-			JSONObject json = new JSONObject(delJson);
-			code = json.getString("code");
-			name = json.getString("name");
-			description = json.getString("description");
-			countries = new ArrayList<String>();
-			JSONArray countriesJson = json.getJSONArray("countries");
-			for (int i = 0; i < countriesJson.length(); i++) {
-				countries.add(countriesJson.getString(i));
-			}
-			tariffs = new ArrayList<Tariff>();
-			JSONArray tariffsJson = json.getJSONArray("tariffs");
-			for (int i = 0; i < tariffsJson.length(); i++) {
-				JSONObject tariffJson = tariffsJson.getJSONObject(i);
-				double minDimension = tariffJson.getDouble("minDimension");
-				double maxDimension = tariffJson.getDouble("maxDimension");
-				double minWeight = tariffJson.getDouble("minWeight");
-				double maxWeight = tariffJson.getDouble("maxWeight");
-				double price = tariffJson.getDouble("price");
-				Tariff tariff = new Tariff(minDimension, maxDimension, minWeight, maxWeight, price);
-				tariffs.add(tariff);
-			}
-		} catch (JSONException e) {
-			e.printStackTrace();
+
+		if (deliverer.getName() == null || deliverer.getName().isEmpty()) {
+			return JSONParser.getSimpleResponse("ERROR");
+		}
+		if (deliverer.getDimensionRatio() == -1 || deliverer.getMinPrice() == -1 || deliverer.getWeightRatio() == -1) {
 			return JSONParser.getSimpleResponse("ERROR");
 		}
 
-		Deliverer deliverer = new Deliverer();
-		deliverer.setCode(code);
-		deliverer.setName(name);
-		deliverer.setDescription(description);
-		deliverer.setCountries(countries);
-		deliverer.setTariffs(tariffs);
-		
-		if (DAO.updateDeliverer(deliverer.getCode(), deliverer)) {
-			return JSONParser.getSimpleResponse("OK");
-		} else {
-			return JSONParser.getSimpleResponse("ERROR");
-		}
+		DAO.updateDeliverer(delivererCode, deliverer);
+
+		return JSONParser.getSimpleResponse("OK");
 
 	}
 

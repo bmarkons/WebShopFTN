@@ -22,5 +22,11 @@ reviewsDialogController = function ($scope, $mdDialog, reviewed, target, Review)
 		$mdDialog.cancel();
 	};
 
+	$scope.rateReview = function(rating, review){
+		if(rating == 0)
+			return;
+		Review.rate(review, rating);
+	};
+
 	$scope.activate();
 };

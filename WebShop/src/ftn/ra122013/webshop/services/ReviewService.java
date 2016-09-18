@@ -33,6 +33,18 @@ public class ReviewService {
 
 	WebShopDAO DAO = WebShopDAO.getInstance();
 
+	@POST
+	@Path("/rate/{reviewCode}/{rate}")
+	public String rateProduct(@PathParam("reviewCode") String reviewCode, @PathParam("rate") int rate) {
+		//check permission
+		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute("user");
+		
+		DAO.rateReview(reviewCode, rate, (Buyer) user);
+		
+		return JSONParser.getSimpleResponse("OK");
+	}
+	
 	@PUT
 	@Path("/store/add/{storeCode}")
 	@Consumes(MediaType.APPLICATION_JSON)

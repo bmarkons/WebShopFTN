@@ -1,0 +1,24 @@
+<div>
+	<md-list flex>
+		<md-subheader class="md-no-sticky">Your shopping cart</md-subheader>
+		<h2 ng-if="!products">Nothing in cart</h2>
+		<md-list-item ng-repeat="product in productsInCart">
+			<div layout="row">
+				<h4>{{product.name}}</h4>
+				<span flex></span>
+				<md-button ng-click="removeFromCart(product)">
+					<md-tooltip>Remove from cart</md-tooltip>
+					<md-icon>remove_shopping_cart</md-icon>
+				</md-button>
+			</div>
+		</md-list-item>
+	</md-list>
+</div>
+<div flex="10" layout="column">
+	<md-button class="md-fab" ng-click="goToPurchase($event)" ng-show="productsInCart.length > 0">
+		<md-icon>done</md-icon>
+		<md-tooltip>
+			Purchase
+		</md-tooltip>
+	</md-button>
+</div>
