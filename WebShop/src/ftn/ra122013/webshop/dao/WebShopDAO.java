@@ -285,9 +285,9 @@ public class WebShopDAO {
 	public synchronized void rateStore(String code, int rate, Buyer buyer) {
 		ArrayList<Store> stores = getAllStores();
 		for (Store store : stores) {
-			if(store.getCode().equals(code)){
+			if (store.getCode().equals(code)) {
 				store.rate(rate, buyer);
-				
+
 				save(storesFile, stores);
 			}
 		}
@@ -389,7 +389,7 @@ public class WebShopDAO {
 		for (Store store : stores) {
 			if (store.getCode().equals(storeCode)) {
 				store.addProduct(product);
-				product.setStore(storeCode);
+				product.setStore(getStore(storeCode));
 
 				File folder = new File(context.getRealPath("/media") + "/" + product.getCode());
 				boolean success = folder.mkdirs();
@@ -715,12 +715,12 @@ public class WebShopDAO {
 
 	public boolean reduceQuantity(Product product) {
 		ArrayList<Store> stores = (ArrayList<Store>) load(storesFile);
-		for(Store store : stores){
-			for(Product p : store.getProducts()){
-				if(p.getCode().equals(product.getCode())){
-					if(p.getQuantity() < 1){
+		for (Store store : stores) {
+			for (Product p : store.getProducts()) {
+				if (p.getCode().equals(product.getCode())) {
+					if (p.getQuantity() < 1) {
 						return false;
-					}else{
+					} else {
 						p.reduceQuantity();
 						save(storesFile, stores);
 						return true;

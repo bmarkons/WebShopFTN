@@ -232,7 +232,7 @@ public class ProductService {
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("user");
 		Product product = DAO.getProduct(code);
-		String storeCode = product.getStore();
+		String storeCode = product.getStore().getCode();
 		if (!(user instanceof Administrator) && !DAO.isAuthorizedSeller(user, storeCode)) {
 			return JSONParser.getSimpleResponse("ERROR");
 		}

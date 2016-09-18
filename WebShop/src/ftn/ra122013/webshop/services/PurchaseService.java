@@ -21,7 +21,9 @@ import ftn.ra122013.webshop.beans.Administrator;
 import ftn.ra122013.webshop.beans.Buyer;
 import ftn.ra122013.webshop.beans.Product;
 import ftn.ra122013.webshop.beans.Purchase;
+import ftn.ra122013.webshop.beans.PurchaseContainer;
 import ftn.ra122013.webshop.beans.Seller;
+import ftn.ra122013.webshop.beans.Store;
 import ftn.ra122013.webshop.beans.User;
 import ftn.ra122013.webshop.dao.WebShopDAO;
 import ftn.ra122013.webshop.json.JSONParser;
@@ -36,10 +38,10 @@ public class PurchaseService {
 	WebShopDAO DAO = WebShopDAO.getInstance();
 
 	@PUT
-	@Path("/add/{delivererCode}")
+	@Path("/add")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public String purchase(ArrayList<Product> products, @PathParam("delivererCode") String delivererCode) {
+	public String purchase(PurchaseContainer purchaseContainer) {
 		// TODO check permission
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("user");
@@ -47,7 +49,7 @@ public class PurchaseService {
 			return JSONParser.getSimpleResponse("ERROR");
 		}
 
-		final ArrayList<Purchase> purchasess = makePurchases(products, delivererCode, (Buyer) user);
+		final ArrayList<Purchase> purchasess = makePurchases(purchaseContainer, (Buyer) user);
 
 		Object retVal = new Object() {
 			public String msg = "OK";
@@ -57,10 +59,10 @@ public class PurchaseService {
 		return JSONParser.toJSON(retVal);
 	}
 
-	private ArrayList<Purchase> makePurchases(ArrayList<Product> products, String delivererCode, Buyer buyer) {
+	private ArrayList<Purchase> makePurchases(PurchaseContainer purchaseContainer, Buyer buyer) {
 		HashMap<String, ArrayList<Product>> map = new HashMap<String, ArrayList<Product>>();
-		for (Product product : products) {
-			String storeCode = product.getStore();
+		for (Product product : purchaseContainer.getProducts()) {
+			String storeCode = product.getStore().getCode();
 			if (map.containsKey(storeCode)) {
 				map.get(storeCode).add(product);
 			} else {
@@ -78,7 +80,12 @@ public class PurchaseService {
 			Purchase purchase = new Purchase();
 			purchase.setCode(DAO.generatePurchaseCode());
 			purchase.setBuyer(buyer);
-			purchase.setDeliverer(DAO.getDeliverer(delivererCode));
+			ArrayList<String> countries = purchaseContainer.getCountries();
+			for (int i = 0; i < countries.size(); i++) {
+				if (countries.get(i).equals(DAO.getStore(storeCode))) {
+					purchase.setDeliverer(DAO.getDeliverer(purchaseContainer.getDelivererCodes().get(i)));
+				}
+			}
 			purchase.setProducts(boughtProducts);
 			purchase.setStore(DAO.getStore(storeCode));
 			purchase.setProducts(map.get(storeCode));
@@ -115,28 +122,28 @@ public class PurchaseService {
 		if (user == null) {
 			return JSONParser.getSimpleResponse("ERROR");
 		}
-		
+
 		ArrayList<Purchase> purchases = null;
-		if(user instanceof Administrator){
+		if (user instanceof Administrator) {
 			purchases = DAO.getAllPurchases();
-		}else if(user instanceof Buyer){
+		} else if (user instanceof Buyer) {
 			ArrayList<Purchase> allPurchases = DAO.getAllPurchases();
 			purchases = new ArrayList<Purchase>();
-			for(Purchase purchase : allPurchases){
-				if(purchase.getBuyer().getUsername().equals(user.getUsername())){
+			for (Purchase purchase : allPurchases) {
+				if (purchase.getBuyer().getUsername().equals(user.getUsername())) {
 					purchases.add(purchase);
 				}
 			}
-		}else if(user instanceof Seller){
+		} else if (user instanceof Seller) {
 			ArrayList<Purchase> allPurchases = DAO.getAllPurchases();
 			purchases = new ArrayList<Purchase>();
-			for(Purchase purchase : allPurchases){
-				if(purchase.getStore().getSeller().equals(user.getUsername())){
+			for (Purchase purchase : allPurchases) {
+				if (purchase.getStore().getSeller().equals(user.getUsername())) {
 					purchases.add(purchase);
 				}
 			}
 		}
-		
+
 		return JSONParser.toJSON(purchases);
 	}
 }

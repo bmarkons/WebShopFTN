@@ -9,17 +9,24 @@
 				</md-button>
 			</div>
 		</md-toolbar>
-		
+
 		<md-dialog-content>
 			<div class="md-dialog-content" back>
-				<md-select ng-model="delivererCode">
-					<md-option ng-repeat="deliverer in deliverers" value="{{deliverer.code}}">{{deliverer.name}}</md-option>
-				</md-select>
-
+				<h2>Choose delivery for following countries!</h2>
+				<div ng-repeat="group in coutryGroups">
+					<h4>group.country</h4>
+					<md-select ng-model="group.deliveryCode">
+						<md-option ng-repeat="deliverer in deliverers" value="{{deliverer.code}}">{{deliverer.name}}</md-option>
+					</md-select>
+					<ul>
+						<li ng-repeat="product in group.products">{{product.name}}</li>
+					</ul>
+					<md-divider></md-divider>
+				</div>
 			</div>
 		</md-dialog-content>
 		<md-dialog-actions layout="row" layout-align="center center">
-			<md-button style="background-color: green;" ng-click="purchase()" ng-disabled="!delivererCode">
+			<md-button ng-click="purchase()" ng-disabled="!delivererCode">
 				<label>Purchase</label>
 				<md-icon>done</md-icon>
 			</md-button>

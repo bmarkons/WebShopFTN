@@ -50,9 +50,11 @@ webShopApp.service('Product', function($http, $mdToast, $mdDialog){
 	}
 
 	Product.add = function(product, $scope){
+		var storeCode = product.store;
+		delete product["store"];
 		$.ajax({
 			type : 'PUT',
-			url : '/WebShop/rest/product/add/' + product.store,
+			url : '/WebShop/rest/product/add/' + storeCode,
 			data : angular.toJson(product),
 			dataType : 'json',
 			contentType : 'application/json',
@@ -100,7 +102,7 @@ Product.update = function(product){
 	delete product["reviews"];
 	$.ajax({
 		type : 'POST',
-		url : '/WebShop/rest/product/update/' + product.store,
+		url : '/WebShop/rest/product/update/' + product.store.code,
 		data : angular.toJson(product),
 		dataType : 'json',
 		contentType : 'application/json',

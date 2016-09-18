@@ -37,7 +37,7 @@ public class Product extends Reviewed implements Serializable {
 	private double quantity;
 	private String videoUrl;
 	private double weight;
-	private String store;
+	private Store store;
 	private HashMap<String, Integer> rates = new HashMap<String, Integer>();
 
 	public void rate(int rate, Buyer buyer) {
@@ -80,11 +80,11 @@ public class Product extends Reviewed implements Serializable {
 		return imgFile.delete();
 	}
 
-	public String getStore() {
+	public Store getStore() {
 		return store;
 	}
 
-	public void setStore(String store) {
+	public void setStore(Store store) {
 		this.store = store;
 	}
 

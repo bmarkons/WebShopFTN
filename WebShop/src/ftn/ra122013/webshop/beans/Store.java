@@ -1,14 +1,12 @@
 package ftn.ra122013.webshop.beans;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import javax.xml.bind.annotation.XmlRootElement;
 
-import org.codehaus.jackson.annotate.JsonManagedReference;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
-@XmlRootElement
+@JsonIgnoreProperties(ignoreUnknown=true)
 public class Store extends Reviewed {
 
 	private static final long serialVersionUID = 638326813827023481L;
