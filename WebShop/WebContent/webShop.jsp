@@ -117,7 +117,7 @@
 		</div>
       		</md-toolbar>
      		<md-content layout-padding>
-				<md-button ng-show="{{user.type == 'admin'}}" ng-click='toggleSideNav()' ng-href="/WebShop/webShop.jsp#/users" aria-label="User account">
+				<md-button ng-show="user.type == 'admin'" ng-click='toggleSideNav()' ng-href="/WebShop/webShop.jsp#/users" aria-label="User account">
          			<md-icon>people</md-icon>
          			<label>Users</label>
        		</md-button><br/>
@@ -136,15 +136,15 @@
          			<label ng-if="user.type == 'buyer'">My Purchases</label>
          			<label ng-if="user.type == 'seller'">My Stores Purchases</label>
        		</md-button><br/>
-       		<md-button ng-click='toggleSideNav()' ng-href="/WebShop/webShop.jsp#/reviews" aria-label="Reviews">
+       		<md-button ng-show="user.type == 'admin'" ng-click='toggleSideNav()' ng-href="/WebShop/webShop.jsp#/reviews" aria-label="Reviews">
          			<md-icon>mode_comment</md-icon>
          			<label>Reviews</label>
        		</md-button><br/>
-       		<md-button ng-click='toggleSideNav()' ng-href="/WebShop/webShop.jsp#/categories" aria-label="Categories">
+       		<md-button ng-show="user.type == 'admin'" ng-click='toggleSideNav()' ng-href="/WebShop/webShop.jsp#/categories" aria-label="Categories">
          			<md-icon>flag</md-icon>          	
          			<label>Categories</label>
        		</md-button><br/>
-       		<md-button ng-click='toggleSideNav()' ng-href="/WebShop/webShop.jsp#/deliverers" aria-label="Deliverers">
+       		<md-button ng-show="user.type == 'admin'" ng-click='toggleSideNav()' ng-href="/WebShop/webShop.jsp#/deliverers" aria-label="Deliverers">
          			<md-icon>directions_car</md-icon>          			
          			<label>Deliverers</label>
        		</md-button><br/>

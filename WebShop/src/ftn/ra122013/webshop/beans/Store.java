@@ -8,11 +8,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.codehaus.jackson.annotate.JsonManagedReference;
 
 @XmlRootElement
-public class Store extends Reviewed implements Serializable {
+public class Store extends Reviewed{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 638326813827023481L;
 	private String address;
 	private String code;

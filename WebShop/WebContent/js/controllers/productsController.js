@@ -2,6 +2,10 @@ webShopApp.controller('ProductsController', function($scope, $http, $mdDialog, $
 	//Init;
 	Product.getAll($scope);
 	
+	$scope.showReviews = function(ev, product){
+		Dialog.showProductReviews(ev, product);
+	}
+
 	$scope.removeImage = function(product, image){
 		Product.removeImage(product, image);
 	};
