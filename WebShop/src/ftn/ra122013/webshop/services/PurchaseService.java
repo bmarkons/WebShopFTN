@@ -42,10 +42,9 @@ public class PurchaseService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public String purchase(PurchaseContainer purchaseContainer) {
-		// TODO check permission
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("user");
-		if (user == null) {
+		if (!(user instanceof Buyer)) {
 			return JSONParser.getSimpleResponse("ERROR");
 		}
 

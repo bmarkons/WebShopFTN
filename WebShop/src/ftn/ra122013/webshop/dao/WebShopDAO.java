@@ -601,6 +601,25 @@ public class WebShopDAO {
 		return reviews;
 	}
 
+	public synchronized Review getReview(String code){
+		ArrayList<Store> stores = (ArrayList<Store>) load(storesFile);
+		for(Store store : stores){
+			for(Review review : store.getReviews()){
+				if(review.getCode().equals(code)){
+					return review;
+				}
+			}
+			for(Product product : store.getProducts()){
+				for(Review review : product.getReviews()){
+					if(review.getCode().equals(code)){
+						return review;
+					}
+				}
+			}
+		}
+		return null;
+	}
+	
 	public synchronized ArrayList<Review> getStoreReviews(String code) {
 		ArrayList<Store> stores = (ArrayList<Store>) load(storesFile);
 		for (Store store : stores) {

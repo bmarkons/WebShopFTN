@@ -28,6 +28,12 @@ webShopApp.service('Store', function($http, Auth, $mdToast){
 					.textContent('Thanks for rating!')
 					.hideDelay(3000)
 					);
+			}else{
+				$mdToast.show(
+					$mdToast.simple()
+					.textContent('You are not allowed to rate this store.')
+					.hideDelay(3000)
+					);
 			}
 		});
 	}

@@ -52,12 +52,14 @@ public class ProductService {
 	@POST
 	@Path("/rate/{productCode}/{rate}")
 	public String rateProduct(@PathParam("productCode") String productCode, @PathParam("rate") int rate) {
-		//check permission
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("user");
-		
+		if (!(user instanceof Buyer)) {
+			return JSONParser.getSimpleResponse("ERROR");
+		}
+
 		DAO.rateProduct(productCode, rate, (Buyer) user);
-		
+
 		return JSONParser.getSimpleResponse("OK");
 	}
 
@@ -179,7 +181,7 @@ public class ProductService {
 		// set video url
 		Product product = DAO.getProduct(productCode);
 		product.setVideoUrl(videoUrl);
-		
+
 		return JSONParser.getSimpleResponse("OK");
 	}
 

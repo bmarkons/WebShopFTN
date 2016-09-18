@@ -20,6 +20,7 @@ import org.apache.tomcat.util.codec.binary.StringUtils;
 
 import ftn.ra122013.webshop.beans.Administrator;
 import ftn.ra122013.webshop.beans.Buyer;
+import ftn.ra122013.webshop.beans.Purchase;
 import ftn.ra122013.webshop.beans.Seller;
 import ftn.ra122013.webshop.beans.Store;
 import ftn.ra122013.webshop.beans.User;
@@ -39,13 +40,21 @@ public class StoreService {
 	@POST
 	@Path("/rate/{storeCode}/{rate}")
 	public String rateProduct(@PathParam("storeCode") String storeCode, @PathParam("rate") int rate) {
-		// check permission
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("user");
-
-		DAO.rateStore(storeCode, rate, (Buyer) user);
-
-		return JSONParser.getSimpleResponse("OK");
+		if (!(user instanceof Buyer)) {
+			return JSONParser.getSimpleResponse("ERROR");
+		}
+		ArrayList<Purchase> purchases = DAO.getAllPurchases();
+		for (Purchase purchase : purchases) {
+			String pStoreCode = purchase.getStore().getCode();
+			String pBuyerUsername = purchase.getBuyer().getUsername();
+			if (pStoreCode.equals(storeCode) && pBuyerUsername.equals(user.getUsername())) {
+				DAO.rateStore(storeCode, rate, (Buyer) user);
+				return JSONParser.getSimpleResponse("OK");
+			}
+		}
+		return JSONParser.getSimpleResponse("ERROR");
 	}
 
 	@GET

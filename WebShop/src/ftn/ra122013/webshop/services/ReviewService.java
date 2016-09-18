@@ -15,6 +15,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import ftn.ra122013.webshop.beans.Administrator;
 import ftn.ra122013.webshop.beans.Buyer;
 import ftn.ra122013.webshop.beans.Product;
 import ftn.ra122013.webshop.beans.ProductReview;
@@ -36,24 +37,25 @@ public class ReviewService {
 	@POST
 	@Path("/rate/{reviewCode}/{rate}")
 	public String rateProduct(@PathParam("reviewCode") String reviewCode, @PathParam("rate") int rate) {
-		//check permission
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("user");
-		
+		if (!(user instanceof Buyer)) {
+			return JSONParser.getSimpleResponse("ERROR");
+		}
+
 		DAO.rateReview(reviewCode, rate, (Buyer) user);
-		
+
 		return JSONParser.getSimpleResponse("OK");
 	}
-	
+
 	@PUT
 	@Path("/store/add/{storeCode}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public String addStoreReview(StoreReview review, @PathParam("storeCode") String storeCode) {
-		// TODO check access
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("user");
-		if (user == null) {
+		if (!(user instanceof Buyer)) {
 			return JSONParser.getSimpleResponse("ERROR. Not logged in");
 		}
 
@@ -77,10 +79,9 @@ public class ReviewService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public String addProductReview(ProductReview review, @PathParam("productCode") String productCode) {
-		// TODO check access
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("user");
-		if (user == null) {
+		if (!(user instanceof Buyer)) {
 			return JSONParser.getSimpleResponse("ERROR. Not logged in");
 		}
 
@@ -104,11 +105,14 @@ public class ReviewService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.TEXT_PLAIN)
 	public String updateReview(String editedComment, @PathParam("code") String code) {
-		// TODO check access
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("user");
 		if (user == null) {
 			return JSONParser.getSimpleResponse("ERROR. Not logged in");
+		}
+		Review review = DAO.getReview(code);
+		if (!review.getBuyer().getUsername().equals(user.getUsername())) {
+			return JSONParser.getSimpleResponse("ERROR");
 		}
 
 		String msg = DAO.editCommentReview(code, editedComment) ? "OK" : "ERROR";
@@ -120,46 +124,17 @@ public class ReviewService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.TEXT_PLAIN)
 	public String deleteStoreReview(@PathParam("code") String code) {
-		// TODO check access
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("user");
 		if (user == null) {
 			return JSONParser.getSimpleResponse("ERROR. Not logged in");
 		}
-		
+		Review review = DAO.getReview(code);
+		if (!review.getBuyer().getUsername().equals(user.getUsername()) && !(user instanceof Administrator)) {
+			return JSONParser.getSimpleResponse("ERROR");
+		}
+
 		String msg = DAO.removeReview(code) ? "OK" : "ERROR";
 		return JSONParser.getSimpleResponse(msg);
-	}
-
-	@PUT
-	@Path("/addproduct")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.TEXT_PLAIN)
-	public void addProductReview() {
-
-	}
-
-	@POST
-	@Path("/updateproduct")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.TEXT_PLAIN)
-	public void updateProductReview() {
-
-	}
-
-	@DELETE
-	@Path("/deleteproduct")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.TEXT_PLAIN)
-	public void deleteProductReview() {
-
-	}
-
-	@POST
-	@Path("/rate")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.TEXT_PLAIN)
-	public void rateReview() {
-
 	}
 }

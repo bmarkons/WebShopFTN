@@ -13,13 +13,15 @@
 		<md-dialog-content>
 			<div class="md-dialog-content" back>
 				<h2>Choose delivery for following countries!</h2>
-				<div ng-repeat="group in coutryGroups">
-					<h4>group.country</h4>
+				<div ng-repeat="group in groups">
+					<h4>{{group.country}}</h4>
 					<md-select ng-model="group.deliveryCode">
-						<md-option ng-repeat="deliverer in deliverers" value="{{deliverer.code}}">{{deliverer.name}}</md-option>
+						<md-option ng-repeat="deliverer in deliverers | filter:delByCountry(group.country)" value="{{deliverer.code}}">{{deliverer.name}}</md-option>
 					</md-select>
 					<ul>
-						<li ng-repeat="product in group.products">{{product.name}}</li>
+						<li ng-repeat="product in productsInCart | filter:prodByCountry(group.country)">
+							{{product.name}}
+						</li>
 					</ul>
 					<md-divider></md-divider>
 				</div>
