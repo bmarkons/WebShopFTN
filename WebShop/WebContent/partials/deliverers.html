@@ -1,21 +1,35 @@
-<div>
-	<h2>
-		Deliverers list
-	</h3>
-	<a href="/WebShop/webShop.jsp#/addDeliverer">Add deliverer</a> Search:
-	<input type="text" ng-model="delSearch" /><br>
-
-	<div ng-repeat="deliverer in deliverers | filter: delSearch">
-		<hr>
-		<div>
-			<h3>{{deliverer.name}}</h3>
-			Description:<br><br>
-			<p>{{deliverer.description}}</p>
-			<br> Countries: {{deliverer.countries}} <br>
-			<button ng-click="editDeliverer(deliverer)">
-				Edit
-			</button>
-			<md-button class="md-warn" ng-click="removeDeliverer(deliverer.code)">Remove</md-button>
+<div class="wsContainer">
+	<md-subheader>
+		<div layout="row" layout-align="space-between center">
+			<md-icon>directions_car</md-icon>
+			<span>Deliverers list</span>
+			<span flex></span>
+			<md-input-container style="margin-top: -3px;margin-bottom: -25px;">
+				<label>Search</label>
+				<input ng-model="delSearch"/>
+			</md-input-container>
+			<md-button style="margin: -5px 0px;" class="md-fab md-accent md-mini" ng-href="/WebShop/webShop.jsp#/addDeliverer">
+				<md-icon>add</md-icon>
+			</md-button>
 		</div>
+	</md-subheader>
+	<div ng-repeat="deliverer in deliverers | filter: delSearch">
+		<div layout="row">
+			<h3>{{deliverer.name}}</h3>
+			<span flex></span>
+			<md-button class="md-fab md-mini" ng-click="editDeliverer(deliverer)">
+				<md-icon>mode_edit</md-icon>
+			</md-button>
+			<md-button class="md-fab md-mini md-warn" ng-click="removeDeliverer(deliverer.code)">
+				<md-icon>delete_forever</md-icon>
+			</md-button>
+		</div>
+		<div class="padded" md-whiteframe="5" flex-sm="405" flex-gt-sm="300" flex-gt-md="25" layout-padding layout-align="center center">
+			<p ng-show="deliverer.description">{{deliverer.description}}</p>
+			<p ng-hide="deliverer.description"><i>No description available</i></p>
+		</div>
+
+		<br/> Countries: {{deliverer.countries}} <br/>
+		<md-divider></md-divider>
 	</div>
 </div>

@@ -1,48 +1,59 @@
-<div>
-	<h3>Edit profile</h3>
-	<form>
-	<table>
-			<tr>
-				<td>Username: </td>
-				<td><input type="text" name="username" ng-model="user.username" required disabled/></td>
-			</tr>
-			<tr>
-				<td>Password: </td>
-				<td><input type="password" name="password" ng-model="user.password" required/></td>
-			</tr>
-			<tr>
-				<td>E-mail: </td>
-				<td><input type="email" name="email" ng-model="user.email" required/></td>
-			</tr>
-			<tr>
-				<td>Name: </td>
-				<td><input type="text" name="name" ng-model="user.name"/></td>
-			</tr>
-			<tr>
-				<td>Surname: </td>
-				<td><input type="text" name="surname" ng-model="user.surname"/></td>
-			</tr>
-			<tr>
-				<td>Address:</td>
-				<td><input type="text" name="address" ng-model="user.address"/></td>
-			</tr>
-			<tr>
-				<td>Telephone:</td>
-				<td><input type="text" name="telephone" ng-model="user.telephone"/></td>
-			</tr>
-			<tr>
-				<td>Select country:</td>
-				<td>
-					<select id="countrySelect" ng-model="user.country">
-						<option disabled selected> -- select your country -- </option>
-						<option ng-repeat = "country in countries" value="{{country}}">{{country}}</option>
-					</select>
-				</td>
-			</tr>
-	</table>
-	<br>
-	<button ng-click="updateUser()" value="Save">Save changes</button>
-
-	</form>
-	<button ng-click="reset()">Reset change</button>
+<div layout-padding>
+	<div flex-xs flex-gt-xs="600" layout="column">
+		<md-card>
+			<md-card-header>
+				<md-card-header-text>
+					<span class="md-title">{{user.username}}</span>
+					<span class="md-subhead">{{user.type}}</span>
+				</md-card-header-text>
+				<span flex></span>
+				<md-card-actions layout="row" layout-align="start center">
+					<md-button class="md-fab md-mini" ng-click="updateUser()"><md-icon>save</md-icon></md-button>
+					<md-button class="md-fab md-mini" ng-click="reset"><md-icon>refresh</md-icon></md-button>
+				</md-card-actions>
+			</md-card-header>
+			<md-card-content layout="row" style="margin-left: 20px;margin-right: 20px">
+				<div layout="column">
+					<md-input-container>
+						<label>Username</label>
+						<input ng-disabled="true" ng-model="user.username"/>
+					</md-input-container>
+					<md-input-container>
+						<label>Password</label>
+						<input type="password" ng-model="user.password"/>
+					</md-input-container>
+					<md-input-container>
+						<label>E-mail</label>
+						<input ng-model="user.email"/>
+					</md-input-container>
+					<md-input-container>
+						<label>Country</label>
+						<md-select ng-model="user.country">
+							<md-option ng-repeat="country in countries" ng-value="{{country}}">
+								{{country}}
+							</md-option>
+						</md-select>
+					</md-input-container>
+				</div>
+				<div layout="column">
+					<md-input-container>
+						<label>Name</label>
+						<input ng-model="user.name"/>
+					</md-input-container>
+					<md-input-container>
+						<label>Surname</label>
+						<input ng-model="user.surname"/>
+					</md-input-container>
+					<md-input-container>
+						<label>Address</label>
+						<input ng-model="user.address"/>
+					</md-input-container>
+					<md-input-container>
+						<label>Telephone</label>
+						<input ng-model="user.telephone"/>
+					</md-input-container>
+				</div>
+			</md-card-content>
+		</md-card>
+	</div>
 </div>

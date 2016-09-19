@@ -1,7 +1,5 @@
-webShopApp.controller('ProfileController', function($scope,$http) {
-	$http.get("/WebShop/rest/admin/getCountries").success( function(response) {
-		$scope.countries = response;
-	});
+webShopApp.controller('ProfileController', function($scope, $http, Country) {
+	Country.getAll($scope);
 	$scope.reset = function(){
 		$http.get("/WebShop/rest/user/me").success( function(response) {
 			$scope.user = response;

@@ -56,7 +56,7 @@ public class ReviewService {
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("user");
 		if (!(user instanceof Buyer)) {
-			return JSONParser.getSimpleResponse("ERROR. Not logged in");
+			return JSONParser.getSimpleResponse("ERROR.");
 		}
 
 		review.setCode(DAO.generateReviewCode());
@@ -82,7 +82,7 @@ public class ReviewService {
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("user");
 		if (!(user instanceof Buyer)) {
-			return JSONParser.getSimpleResponse("ERROR. Not logged in");
+			return JSONParser.getSimpleResponse("ERROR.");
 		}
 
 		review.setCode(DAO.generateReviewCode());

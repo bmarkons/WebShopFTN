@@ -16,7 +16,7 @@ webShopApp.controller('CategoriesController', function($scope,$http,$mdDialog,$m
 	    }
 	    $mdDialog.show({
 	      controller: dialogController,
-	      templateUrl: '/WebShop/adminPartials/newCategoryDialog.html',
+	      templateUrl: '/WebShop/partials/newCategoryDialog.html',
 	      parent: angular.element(document.body),
 	      targetEvent: ev,
 	      clickOutsideToClose:true,

@@ -1,18 +1,94 @@
-	<div>
-	
-		<h1>{{userTypeSelected}} list</h1>
-
-		<fieldset>
-			<legend>Filtering</legend>
-			<input type="radio" ng-model="userTypeSelected" name="userType" value="user" checked>All users</input><br>
-			<input type="radio" ng-model="userTypeSelected" name="userType" value="buyer">Buyers</input><br>
-			<input type="radio" ng-model="userTypeSelected" name="userType" value="seller">Sellers</input><br>
-			<input type="radio" ng-model="userTypeSelected" name="userType" value="admin">Administrators</input><br>
-			Filter users: <input type = "text" ng-model = "userFilter">
-			<a href="/WebShop/admin.html#/addUser">Add user</a>
-		</fieldset>
-	</br>
-	<table>
+<div class="wsContainer">
+	<md-subheader>
+		<div layout="row" layout-align="space-between center">
+			<md-icon>people</md-icon>
+			<span>User list</span>
+			<span flex></span>
+			<md-input-container style="margin-top: -18px;margin-bottom: -16px;">
+				<md-select ng-model="userTypeSelected">
+					<md-option selected value="user">
+						All
+					</md-option>
+					<md-option value="buyer">
+						Buyers
+					</md-option>
+					<md-option value="seller">
+						Sellers
+					</md-option>
+					<md-option value="admin">
+						Admins
+					</md-option>
+				</md-select>
+			</md-input-container>
+			<md-input-container style="margin-top: -3px;margin-bottom: -25px;">
+				<label>Search</label>
+				<input ng-model="userFilter"/>
+			</md-input-container>
+			<md-button style="margin: -5px 0px;" class="md-fab md-mini md-primary" ng-href="/WebShop/webShop.jsp#/addUser">
+				<md-icon>add</md-icon>
+			</md-button>
+		</div>
+	</md-subheader>
+	<md-card ng-repeat = "user in users | filter: userFilterFn" style="margin-left: 0px; margin-right: 0px;">
+		<md-card-title>
+			<md-card-title-media>
+				<div class="md-media-sm card-media" layout>
+					<md-icon style="color:#009688">person</md-icon>
+				</div>
+			</md-card-title-media>
+			<md-card-title-text>
+				<div layout="row">
+					<span class="md-headline">{{user.name}}&nbsp;{{user.surname}}</span>
+					<span flex></span>
+					<md-button class="md-warn md-fab md-mini" ng-click="removeUser(user.username)">
+						<md-icon>delete_forever</md-icon>
+					</md-button>
+				</div>
+				<style>
+					td {
+					padding: 10px;
+					}
+				</style>
+				<table cellpadding="10">
+					<tr>
+						<td>
+							<md-icon>perm_identity</md-icon>
+							<span>{{user.username}}</span>
+							<span ng-hide="user.username" style="font-style: italic;">Not available</span>
+						</td>
+						<td>
+							<md-icon>vpn_key</md-icon>
+							<span>{{user.password}}</span>
+							<span ng-hide="user.password" style="font-style: italic;">Not available</span>
+						</td>
+						<td>
+							<md-icon>home</md-icon>
+							<span>{{user.address}}</span>
+							<span ng-hide="user.address" style="font-style: italic;">Not available</span>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<md-icon>business</md-icon>
+							<span>{{user.country}}</span>
+							<span ng-hide="user.country" style="font-style: italic;">Not available</span>
+						</td>
+						<td>
+							<md-icon>email</md-icon>
+							<span>{{user.email}}</span>
+							<span ng-hide="user.email" style="font-style: italic;">Not available</span>
+						</td>
+						<td>
+							<md-icon>phone</md-icon>
+							<span>{{user.telephone}}</span>
+							<span ng-hide="user.telephone" style="font-style: italic;">Not available</span>
+						</td>
+					</tr>
+				</table>
+			</md-card-title-text>
+		</md-card-title>
+	</md-card>
+<!-- 	<table>
 		<tr>
 			<th>username</th>
 			<th>password</th>
@@ -35,5 +111,5 @@
 			<td>{{user.telephone}}</td>
 			<td><md-button class="md-warn" ng-click="removeUser(user.username)">Remove</md-button></td>
 		</tr>
-	</table>
+	</table> -->
 </div>

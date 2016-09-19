@@ -1,49 +1,95 @@
 <div>
-	<md-button class="md-raised md-primary" ng-click="addNewProduct($event)">New product</md-button>
-
 	<md-content>
-      <md-list flex>
-          <md-subheader class="md-no-sticky">Product list</md-subheader>
-          <h2 ng-if="products == undefined || products.length == 0">There is no products</h2>
-          <md-list-item style="background-color: {{product.color}};" class="md-3-line" ng-repeat="product in products" ng-click="editProduct($event, product)">
-              <div class="md-list-item-text" layout="column" >
-                <div layout="row">
-                    <h2>{{ product.name }}</h3>
-                    <md-button ng-click="showReviews($event, product)">
-                        <md-icon>mode_comment</md-icon>
-                        <md-tooltip>Show reviews</md-tooltip>
-                    </md-button>
-                    <span flex></span>
-                    <md-button ng-click="removeProduct(product)">
-                        <md-icon>delete_forever</md-icon>
-                        <md-tooltip>
-                            Remove product
-                        </md-tooltip>
-                    </md-button>
-                    <md-button ng-click="addToCart(product)">
-                        <md-icon>add_shopping_cart</md-icon>
-                        <md-tooltip>Add to shopping cart</md-tooltip>
-                    </md-button>
-                </div>
-
-                <table>
-                 <tr><td>Store:</td><td>{{ product.store.code }}</td></tr>
-                 <tr><td>Size:</td><td>{{ product.dimension }} m<sup>2</sup></td></tr>
-                 <tr><td>Origin country:</td><td>{{product.country}}</td></tr>
-                 <tr><td>Weight:</td><td>{{product.weight}} kg</td></tr>
-                 <tr><td>Producer:</td><td>{{product.producer}}</td></tr>
-                 <tr><td>Unit price:</td><td>{{product.unitPrice}}</td></tr>
-                 <tr><td>Category:</td><td>{{product.categoryName}}</td></tr>
-                 <tr><td>Quantity:</td><td>{{product.quantity}}</td></tr>
-             </table>
-             <md-button>
-                <jk-rating-stars rating="product.rate" read-only="!isBuyer()" on-rating="rateProduct(rating, product)" >
-                </jk-rating-stars>
+    <md-list flex>
+      <md-subheader>
+        <div layout="row" layout-align="space-between center">
+          <md-icon>card_giftcard</md-icon>
+          <span>Product list</span>
+          <span flex></span>
+          <md-button style="margin: -5px 0px;" class="md-fab md-primary md-mini" ng-if="isAdmin() || isSeller()" ng-click="addNewProduct($event)">
+            <md-icon>add</md-icon>
+          </md-button>
+        </div>
+      </md-subheader>
+      <h2 ng-if="products == undefined || products.length == 0">There is no products</h2>
+      <md-list-item style="background-color: {{product.color}};" class="md-3-line" ng-repeat="product in products" ng-click="editProduct($event, product)" ng-disabled="!(user.type == 'admin') && !(user.username == product.store.seller)">
+        <div class="md-list-item-text" layout="column" >
+          <div layout="row" layout-align="start end">
+            <h2>{{ product.name }}</h3>
+            <jk-rating-stars style="margin-right: 5px; margin-left: 20px;" rating="product.rate" read-only="!isBuyer()" on-rating="rateProduct(rating, product)">
+            </jk-rating-stars>
+            <md-button class="md-mini md-fab md-primary" ng-click="showReviews($event, product)">
+              <md-icon>comment</md-icon>
+              <md-tooltip>Show reviews</md-tooltip>
             </md-button>
-            <md-button ng-click="addImage($event, product)">Add image</md-button>
-            <div ng-repeat="image in product.images">
-             <md-button class="md-warn" ng-click="removeImage(product, image)">rem</md-button>
-             <md-button><img height="100" width="100" data-ng-src="data:image/png;base64,{{image.data}}"/></md-button>
+            <span flex></span>
+            <md-button class="md-mini md-fab md-warn" ng-if="isAdmin() || user.username == product.store.seller" ng-click="removeProduct(product)">
+              <md-icon>delete_forever</md-icon>
+              <md-tooltip>
+                Remove product
+              </md-tooltip>
+            </md-button>
+            <md-button class="md-fab md-mini" ng-if="isBuyer()" ng-click="addToCart(product)">
+              <md-icon>add_shopping_cart</md-icon>
+              <md-tooltip>Add to shopping cart</md-tooltip>
+            </md-button>
+          </div>
+          <style>
+            td {
+            padding: 10px;
+            padding-bottom: 0px;
+            }
+          </style>
+          <table>
+            <tr>
+              <td>
+                <md-icon>store</md-icon>
+                <span>{{product.store.name}}</span>
+                <span ng-hide="product.store.name" style="font-style: italic;">Not available</span>
+              </td>
+              <td>
+                <md-icon>open_with</md-icon>
+                <span ng-show="product.dimension != 0">{{product.dimension}}&nbsp;m<sup>2</sup></span>
+                <span ng-hide="product.dimension != 0" style="font-style: italic;">Not available</span>
+              </td>
+              <td>
+                <md-icon>business</md-icon>
+                <span>{{product.country}}</span>
+                <span ng-hide="product.country" style="font-style: italic;">Not available</span>
+              </td>
+              <td>
+                <md-icon>get_app</md-icon>
+                <span ng-show="product.weight != 0">{{product.weight}}</span>
+                <span ng-hide="product.weight != 0" style="font-style: italic;">Not available</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <md-icon>face</md-icon>
+                <span>{{product.producer}}</span>
+                <span ng-hide="product.producer" style="font-style: italic;">Not available</span>
+              </td>
+              <td>
+                <md-icon>attach_money</md-icon>
+                <span ng-show="product.unitPrice != 0">{{product.unitPrice}}</span>
+                <span ng-hide="product.unitPrice != 0" style="font-style: italic;">Not available</span>
+              </td>
+              <td>
+                <md-icon>flag</md-icon>
+                <span ng-show="product.categoryName">{{product.categoryName}}</span>
+                <span ng-hide="product.categoryName" style="font-style: italic;">Not available</span>
+              </td>
+              <td>
+                <md-icon>shopping_cart</md-icon>
+                <span ng-show="product.quantity != 0">{{product.quantity}}</span>
+                <span ng-hide="product.quantity != 0" style="font-style: italic;">Not available</span>
+              </td>
+            </tr>
+          </table>
+          <md-button ng-if="(user.type == 'admin') || (user.username == product.store.seller)" ng-click="addImage($event, product)">Add image</md-button>
+          <div ng-repeat="image in product.images">
+           <md-button class="md-warn" ng-if="(user.type == 'admin') || (user.username == product.store.seller)" ng-click="removeImage(product, image)">rem</md-button>
+           <md-button><img height="100" width="100" data-ng-src="data:image/png;base64,{{image.data}}"/></md-button>
          </div>
 <!--              <div ng-show="product.videoUrl" style="overflow:hidden;height:270px;width:480px;max-width:100%;max-height:100%;"><div id="youtube_canvas" style="height:100%;width:100%;max-width:100%"><md-button><iframe style="height:100%;width:100%;max-width:100%;border:0;" frameborder="0" src="{{}}"></iframe></md-button></div><a class="youtube-embed-code" href="http://www.tubeembed.com" id="get-youtube-data">tubeembed</a><style>#youtube_canvas img{max-width:none!important;background:none!important}</style>
 </div> -->

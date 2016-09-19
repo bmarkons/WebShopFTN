@@ -1,6 +1,8 @@
-webShopApp.controller('StoresController', function($scope,$http,$mdDialog,$mdMedia,$mdToast,$rootScope, Dialog, Store) {
+webShopApp.controller('StoresController', function($scope,$http,$mdDialog,$mdMedia,$mdToast,$rootScope, Dialog, Store, Country) {
 	$scope.activate = function(){
+		Country.getAll($scope);
 		$scope.getAllStores();
+		$scope.storeSearch = "";
 	}
 
 	$scope.showReviews = function(ev, store){
@@ -74,6 +76,21 @@ webShopApp.controller('StoresController', function($scope,$http,$mdDialog,$mdMed
 			return;
 		Store.rate(store, rating);
 	};
+
+	$scope.storeFilter = function(item){
+		if((item.name.indexOf($scope.storeSearch) > -1)){
+
+			if($scope.rateFilter && item.rate != $scope.rateFilter){
+				return false;
+			}
+
+			if($scope.countryFilter && item.country != $scope.countryFilter){
+				return false;
+			}
+
+			return true;
+		}
+	}
 	
 	$scope.activate();
 });

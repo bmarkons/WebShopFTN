@@ -1,4 +1,4 @@
-webShopApp.service('Product', function($http, $mdToast, $mdDialog){
+webShopApp.service('Product', function($http, $mdToast, $mdDialog, Auth){
 
 	var Product = this;
 

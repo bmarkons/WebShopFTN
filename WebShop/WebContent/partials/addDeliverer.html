@@ -1,4 +1,5 @@
-<div>
+<div layout-padding>
+	<md-subheader>Deliverer <span style="text-transform: uppercase;">{{name}}</span></md-subheader>
 	<form name="form">
 		<md-input-container>
 			<label>Deliverer name</label>
@@ -29,11 +30,11 @@
 			</md-input-container>
 		</div>
 		<div layout-padding>
-			<h3 layout-padding="center center">{{weightRatio}} x WEIGHT + {{dimensionRatio}} x DIMENSION + {{minPrice}} = DELIVERY PRICE</h3>
+			<h3 layout-padding="center center">{{weightRatio}} x <span style="color:blue">WEIGHT</span> + {{dimensionRatio}} x <span style="color:blue">DIMENSION</span> + {{minPrice}} = DELIVERY PRICE</h3>
 		</div>
-		<div layout="row">
-			<md-button ng-click="addDeliverer()" type="submit">Add</md-button>
-			<md-button ng-href="/WebShop/webShop.jsp#/">Cancel</md-button>
+		<div layout-padding layout="row" layout-align="center center">
+			<md-button class="md-primary md-fab md-mini" ng-click="addDeliverer()" type="submit"><md-icon>done_all</md-icon></md-button>
+			<md-button class="md-fab md-mini md-warn" ng-href="/WebShop/webShop.jsp#/"><md-icon>cancel</md-icon></md-button>
 		</div>
 	</form>
 </div>

@@ -1,44 +1,107 @@
-<div flex="50">
+<div class="wsContainer">
 	<md-content>
 		<md-list flex>
-			<md-subheader class="md-no-sticky">Store list</md-subheader>
+			<md-subheader>
+				<div layout="row" layout-align="space-between center">
+					<md-icon>store</md-icon>
+					<span>Store list</span>
+					<span flex></span>
+					<md-input-container style="margin-top: -18px;margin-bottom: -16px;">
+						<md-select ng-model="countryFilter">
+							<md-option ng-repeat="country in countries track by $index" ng-value="country">
+								{{country}}
+							</md-option>
+						</md-select>
+					</md-input-container>
+					<md-input-container style="margin-top: -18px;margin-bottom: -16px;">
+						<md-select ng-model="rateFilter">
+							<md-option value="">
+								All
+							</md-option>
+							<md-option value=1>
+								1
+							</md-option>
+							<md-option value=2>
+								2
+							</md-option>
+							<md-option value=3>
+								3
+							</md-option>
+							<md-option value=4>
+								4
+							</md-option>
+							<md-option value=5>
+								5
+							</md-option>
+						</md-select>
+					</md-input-container>
+					<md-input-container style="margin-top: -3px;margin-bottom: -25px;">
+						<label>Search</label>
+						<input ng-model="storeSearch"/>
+					</md-input-container>
+					<md-button style="margin: -5px 0px;" class="md-fab md-primary md-mini" ng-if="isAdmin()" ng-click="showDialog($event,'new')">
+						<md-icon>add</md-icon>
+					</md-button>
+				</div>
+			</md-subheader>
 			<h2 ng-if="stores == undefined || stores.length == 0">There is no stores</h2>
-			<md-list-item class="md-2-line" ng-repeat="store in stores" ng-click="showDialog($event,'edit',store)">
+			<md-list-item class="md-2-line" ng-repeat="store in stores | filter: storeFilter" ng-click="showDialog($event,'edit',store)">
 
 				<div class="md-list-item-text" layout="column" layout-align="stretch">
-					<div layout="row" layout-align="center center">
+					<div layout="row" layout-align="start end">
 						<h2>{{ store.name }}</h2>
-						<md-button ng-if="isAdmin()" class="md-icon-button" ng-click="remove(store.code)">
+						<jk-rating-stars style="margin-right: 5px; margin-left: 20px;" rating="store.rate" read-only="!isBuyer()" on-rating="rateStore(rating, store)" >
+						</jk-rating-stars>
+						<md-button class="md-fab md-mini md-primary" ng-click="showReviews($event, store)">
+							<label>{{store.reviews.count}}</label>
+							<md-icon>comment</md-icon>
+							<md-tooltip>Show reviews</md-tooltip>
+						</md-button>
+						<span flex></span>
+						<md-button class="md-fab md-mini md-warn" ng-if="isAdmin()" class="md-icon-button" ng-click="remove(store.code)">
 							<md-icon>delete_forever</md-icon>
 							<md-tooltip>
 								Remove store
 							</md-tooltip>
 						</md-button>
-						<span flex></span>
-
-						<md-button ng-click="showReviews($event, store)">
-							<label>{{store.reviews.count}}</label>
-							<md-icon>mode_comment</md-icon>
-							<md-tooltip>Show reviews</md-tooltip>
-						</md-button>
-						<md-button>
-							<jk-rating-stars rating="store.rate" read-only="!isBuyer()" on-rating="rateStore(rating, store)" >
-							</jk-rating-stars>
-						</md-button>
 					</div>
 					<div layout>
-						<table flex>
+						<style>
+							td {
+							padding: 10px;
+							padding-bottom: 0px;
+							}
+						</style>
+						<table>
 							<tr>
-								<td ng-show="store.address != null"><md-icon>store</md-icon></td>
-								<td ng-show="store.address != null"> {{ store.address }}&nbsp;|</td>
-								<td ng-show="store.country != null"><md-icon>business</md-icon></td>
-								<td ng-show="store.country != null">{{store.country}}&nbsp;|</td>
-								<td ng-show="store.telephone != null"><md-icon>phone</md-icon></td>
-								<td ng-show="store.telephone != null">{{store.telephone}}&nbsp;|</td>
-								<td ng-show="store.email != null"><md-icon>email</md-icon></td>
-								<td ng-show="store.email != null">{{store.email}}&nbsp;|</td>
-								<td ng-show="store.seller != null"><md-icon>perm_identity</md-icon></td>
-								<td ng-show="store.seller != null">{{store.seller}}</td>
+								<td>
+									<md-icon>home</md-icon>
+									<span>{{store.address}}</span>
+									<span ng-hide="user.address" style="font-style: italic;">Not available</span>
+								</td>
+								<td>
+									<md-icon>face</md-icon>
+									<span>{{store.seller}}</span>
+									<span ng-hide="store.seller" style="font-style: italic;">Not available</span>
+								</td>
+								<td>
+									<md-icon>business</md-icon>
+									<span>{{store.country}}</span>
+									<span ng-hide="store.country" style="font-style: italic;">Not available</span>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<md-icon>email</md-icon>
+									<span>{{store.email}}</span>
+									<span ng-hide="store.email" style="font-style: italic;">Not available</span>
+								</td>
+								<td>
+									<md-icon>phone</md-icon>
+									<span>{{store.telephone}}</span>
+									<span ng-hide="store.telephone" style="font-style: italic;">Not available</span>
+								</td>
+								<td></td>
 							</tr>
 						</table>
 					</div>
@@ -47,12 +110,4 @@
 			</md-list-item>
 		</md-list>
 	</md-content>
-</div>
-<div flex="10" layout="column">
-	<md-button ng-if="isAdmin()" ng-click="showDialog($event,'new')" class="md-fab" aria-label="Eat cake">
-		<md-icon>add</md-icon>
-		<md-tooltip>
-			Add new store
-		</md-tooltip>
-	</md-button>
 </div>

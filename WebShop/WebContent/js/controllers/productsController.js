@@ -1,6 +1,6 @@
 webShopApp.controller('ProductsController', function($scope, $http, $mdDialog, $mdMedia, $mdToast, $rootScope, Dialog, Product, user, ShoppingCart) {
 	//Init;
-	Product.getAll($scope);
+	Product.getAllForUser($scope);
 	
 	$scope.showReviews = function(ev, product){
 		Dialog.showProductReviews(ev, product);
@@ -22,6 +22,8 @@ webShopApp.controller('ProductsController', function($scope, $http, $mdDialog, $
 	};
 
 	$scope.editProduct = function (ev, product){
+		if(!($rootScope.user.type == 'admin') && !($rootScope.user.username == product.store.seller))
+			return;
 		Product.setEditingProduct(product);
 		Dialog.showEditProduct(ev).then(function(msg) {
 			$mdToast.show($mdToast.simple().textContent(msg).hideDelay(3000));
